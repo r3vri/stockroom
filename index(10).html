@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stockroom — Inventory & Sales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafafa;--card:#fff;--ink:#111;--mut:#777;--line:#e5e5e5;--acc:#111;--acc2:#f0f0f0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0a0a;--card:#141414;--ink:#f2f2f2;--mut:#8a8a8a;--line:#2a2a2a;--acc:#fff;--acc2:#1f1f1f}}
+:root[data-theme="dark"]{--bg:#0a0a0a;--card:#141414;--ink:#f2f2f2;--mut:#8a8a8a;--line:#2a2a2a;--acc:#fff;--acc2:#1f1f1f}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px}
+/* intro */
+#intro{position:fixed;inset:0;z-index:99;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .9s ease,transform .9s ease,visibility .9s}
+#intro.out{opacity:0;visibility:hidden;transform:scale(1.06)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes in{to{opacity:1;transform:none;filter:none}}
+.aur{position:absolute;inset:-35%;background:conic-gradient(from 0deg,#000,#2b2b2b,#000,#666,#000,#1d1d1d,#000);filter:blur(90px);opacity:.75;animation:spin 26s linear infinite}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:52px 52px;-webkit-mask-image:radial-gradient(circle at 50% 50%,#000 10%,transparent 68%);mask-image:radial-gradient(circle at 50% 50%,#000 10%,transparent 68%)}
+.spot{position:absolute;left:50%;top:50%;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.17),transparent 65%);transform:translate(-50%,-50%);pointer-events:none;transition:left .3s ease-out,top .3s ease-out}
+.grain{position:absolute;inset:0;opacity:.09;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.sp{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:0;pointer-events:none;animation:tw 3s ease-in-out infinite}
+@keyframes tw{50%{opacity:.9;transform:scale(2)}}
+.stage{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px}
+.mark{width:88px;height:88px;margin-bottom:28px;filter:drop-shadow(0 0 18px rgba(255,255,255,.4));animation:bob 5s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.mark path{stroke-dasharray:320;stroke-dashoffset:320;animation:draw 2s ease forwards}
+.mark .d2{animation-delay:.6s}.mark .d3{animation-delay:1.1s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.logo{font-size:clamp(32px,8vw,70px);letter-spacing:.2em;margin-right:-.2em;font-weight:200;display:flex;text-transform:uppercase;color:#fff}
+.logo span{opacity:0;transform:translateY(26px) scale(.85);filter:blur(10px);background:linear-gradient(110deg,#fff 35%,#8a8a8a 50%,#fff 65%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:in 1s cubic-bezier(.2,.8,.2,1) forwards,shim 3s linear infinite}
+@keyframes shim{from{background-position:120% 0}to{background-position:-120% 0}}
+.rule{height:1px;width:0;background:linear-gradient(90deg,transparent,#fff,transparent);margin:24px 0 20px;animation:rl 1.6s 1.6s ease forwards}
+@keyframes rl{to{width:min(72vw,380px)}}
+.tags{position:relative;height:18px;width:min(92vw,420px)}
+.tags span{position:absolute;inset:0;color:rgba(255,255,255,.75);letter-spacing:.35em;font-size:12px;text-transform:uppercase;opacity:0;animation:tl 1.8s ease forwards}
+.tags .keep{animation:tk 1.2s ease forwards}
+@keyframes tl{0%{opacity:0;transform:translateY(10px);filter:blur(4px)}25%,75%{opacity:1;transform:none;filter:none}100%{opacity:0;transform:translateY(-10px)}}
+@keyframes tk{from{opacity:0;transform:translateY(10px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.slot{position:relative;width:260px;height:54px;margin-top:38px}
+.pct,.gs{position:absolute;inset:0;margin:auto;width:max-content;height:max-content}
+.pct{font-size:13px;letter-spacing:.3em;color:rgba(255,255,255,.6);font-variant-numeric:tabular-nums;animation:fo .6s 8.2s forwards}
+.pct em{font-style:normal;margin-left:3px}
+@keyframes fo{to{opacity:0}}
+.gs{padding:14px 40px;border-radius:99px;border:1px solid #fff;background:#fff;color:#000;letter-spacing:.24em;text-transform:uppercase;font-size:12px;font-weight:600;cursor:pointer;overflow:hidden;opacity:0;animation:in 1s 8.4s forwards}
+.gs:hover{background:transparent;color:#fff;border-color:#fff}
+.gs::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(0,0,0,.2),transparent);transform:skewX(-20deg);animation:sh 2.6s 9.4s infinite}
+@keyframes sh{to{left:130%}}
+.foot{position:absolute;bottom:calc(22px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-size:10px;letter-spacing:.4em;color:rgba(255,255,255,.35);text-transform:uppercase}
+/* app */
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:20px 24px;max-width:1200px;margin:auto}
+h1{font-size:20px;font-weight:600;margin:0;letter-spacing:-.01em}
+h1 b{color:var(--acc)}
+.sub{color:var(--mut);font-size:13px;margin-top:2px}
+.wrap{max-width:1200px;margin:auto;padding:0 24px 40px;display:grid;grid-template-columns:230px 1fr;gap:20px}
+@media(max-width:800px){.wrap{grid-template-columns:1fr;padding:0 14px 30px}header{padding:16px 14px}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:9px;cursor:pointer;transition:.15s}
+button:hover{border-color:var(--acc);color:var(--acc)}
+button.p{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+button.p:hover{opacity:.85;color:var(--bg)}
+input{font:inherit;color:var(--ink);background:transparent;border:1px solid transparent;border-radius:7px;padding:6px 7px;width:100%;min-width:0}
+input:hover{border-color:var(--line)}input:focus{outline:none;border-color:var(--acc);background:var(--acc2)}
+.dates{display:flex;flex-direction:column;gap:6px;max-height:60vh;overflow:auto;margin-top:12px}
+.d{display:flex;justify-content:space-between;align-items:center;padding:9px 11px;border-radius:9px;cursor:pointer;border:1px solid transparent}
+.d:hover{background:var(--acc2)}
+.d.on{background:var(--acc2);border-color:var(--acc);color:var(--acc);font-weight:600}
+.d small{color:var(--mut);font-weight:400}
+.meta{display:flex;gap:16px;flex-wrap:wrap;align-items:end;margin-bottom:14px}
+.meta label{font-size:12px;color:var(--mut);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em}
+.meta input{border:1px solid var(--line);width:170px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-weight:600}
+td{padding:4px 3px;border-bottom:1px solid var(--line)}
+td.n{color:var(--mut);padding-left:8px;width:34px}
+td.t{font-weight:600;padding:0 8px;white-space:nowrap}
+.num{text-align:right}
+.x{color:var(--mut);padding:2px 8px;border:none;background:none}
+.sum{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.sum div{flex:1;min-width:130px;background:var(--acc2);border-radius:11px;padding:12px 14px}
+.sum small{display:block;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.sum b{font-size:20px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.empty{color:var(--mut);text-align:center;padding:50px 10px}
+#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(30px);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:13px;opacity:0;transition:.3s;pointer-events:none}
+#toast.s{opacity:1;transform:translateX(-50%)}
+.mod{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px}.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;width:100%;max-width:420px}.box p{margin:0 0 12px}.box textarea{width:100%;height:140px;font:12px monospace;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;resize:vertical}.box .row{justify-content:flex-end;margin-top:12px}.lbl{font-size:12px;color:var(--mut);margin:12px 0 4px;text-transform:uppercase;letter-spacing:.08em}#nd{border:1px solid var(--line)}
+.box input{border:1px solid var(--line);margin-bottom:10px}
+.gs{position:relative;margin-top:34px;padding:13px 38px;border-radius:99px;border:1px solid #fff;background:#fff;color:#000;letter-spacing:.22em;text-transform:uppercase;font-size:12px;cursor:pointer;opacity:0;animation:in 1s 8.4s forwards}.gs:hover{background:transparent;color:#fff;border-color:#fff}.gs:disabled{cursor:default}
+body{-webkit-font-smoothing:antialiased}
+.hm{width:22px;height:22px;margin-right:9px;vertical-align:-3px;color:var(--acc)}
+.card{border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 18px 40px -22px rgba(0,0,0,.18)}
+.box{box-shadow:0 30px 80px -30px rgba(0,0,0,.4);border-radius:18px}
+button{border-radius:10px;font-weight:500}button:active{transform:scale(.97)}
+tbody tr{transition:background .15s}tbody tr:hover{background:var(--acc2)}
+td.t,.sum b{font-variant-numeric:tabular-nums}
+.sum div{background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden;padding-left:18px}
+.sum div::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc)}
+.d{transition:background .15s}
+header,.wrap{opacity:0;transform:translateY(14px);transition:opacity .9s .3s ease,transform .9s .3s cubic-bezier(.2,.8,.2,1)}
+body.go header,body.go .wrap{opacity:1;transform:none}
+@media print{header,.wrap{opacity:1!important;transform:none!important}}
+@media print{#intro,header button,.side,.row,.x{display:none!important}.wrap{display:block}}
+</style>
+</head>
+<body>
+<div class="mod" id="auth" style="z-index:60;background:var(--bg)"><div class="box"><h1 style="margin-bottom:4px">Stock<b>room</b></h1><div class="sub" style="margin-bottom:14px">Please sign in to access your records.</div><div class="row" style="margin:0 0 12px"><button id="tin" class="p">Sign In</button><button id="tup">Create Account</button></div><input id="au" placeholder="Username" autocomplete="username"><input id="ap" type="password" placeholder="Password (minimum 6 characters)" autocomplete="current-password"><input id="apu" placeholder="Purpose of account (e.g. Mart supply records)" style="display:none"><div id="aerr" class="sub" style="color:#c0392b;min-height:18px"></div><button class="p" id="ago" style="width:100%;margin-top:6px">Sign In</button></div></div>
+<div id="intro">
+  <div class="aur"></div><div class="grid"></div><div class="spot" id="spot"></div><div class="grain"></div>
+  <div class="stage">
+    <svg class="mark" viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"><path d="M50 8L88 28V72L50 92L12 72V28Z"/><path class="d2" d="M12 28L50 48L88 28"/><path class="d3" d="M50 48V92"/></svg>
+    <div class="logo" id="logo"></div>
+    <div class="rule"></div>
+    <div class="tags"><span style="animation-delay:2s">Organised Inventory</span><span style="animation-delay:3.8s">Precise Stock Records</span><span style="animation-delay:5.6s">Accurate Sales Management</span><span class="keep" style="animation-delay:7.4s">Welcome</span></div>
+    <div class="slot"><div class="pct"><span id="pc">0</span><em>%</em></div><button id="gs" class="gs" disabled>Get Started</button></div>
+  </div>
+  <div class="foot">Inventory &middot; Stock &middot; Sales</div>
+</div>
+
+<header>
+  <div><h1><svg class="hm" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><path d="M50 8L88 28V72L50 92L12 72V28Z"/><path d="M12 28L50 48L88 28M50 48V92"/></svg>Stock<b>room</b></h1><div class="sub">Product Inventory and Sales Management System</div><div class="sub" id="who" style="color:var(--acc);font-weight:600"></div></div>
+  <div class="row" style="margin:0">
+    <button id="exp">Export Backup</button>
+    <button id="imp">Import Backup</button>
+    <button id="prt">Print Record</button><button id="out">Log Out</button>
+    <input type="file" id="file" accept=".json" hidden>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside class="card side">
+    <div class="lbl" style="margin-top:0">Record Date</div><input type="date" id="nd"><button class="p" id="new" style="width:100%;margin-top:8px">Create New Record</button>
+    <div class="dates" id="dates"></div>
+  </aside>
+  <main class="card" id="main"></main>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+ var L=document.getElementById('logo'),I=document.getElementById('intro'),G=document.getElementById('gs');
+ "STOCKROOM".split('').forEach(function(c,i){var s=document.createElement('span');s.textContent=c;s.style.animationDelay=(.25+i*.12)+'s';L.appendChild(s)});
+ for(var i=0;i<40;i++){var d=document.createElement('i');d.className='sp';d.style.left=Math.random()*100+'%';d.style.top=Math.random()*100+'%';d.style.animationDelay=Math.random()*3+'s';d.style.animationDuration=(2+Math.random()*3)+'s';I.appendChild(d)}
+ var P=document.getElementById('pc'),t0=Date.now();(function tick(){var p=Math.min(1,(Date.now()-t0)/8300);P.textContent=Math.round((1-Math.pow(1-p,2.2))*100);if(p<1)requestAnimationFrame(tick)})();
+ var sp=document.getElementById('spot');function mv(x,y){sp.style.left=x+'px';sp.style.top=y+'px'}
+ I.addEventListener('mousemove',function(e){mv(e.clientX,e.clientY)});I.addEventListener('touchmove',function(e){var t=e.touches[0];mv(t.clientX,t.clientY)},{passive:true});
+ setTimeout(function(){G.disabled=false},8400);
+ G.onclick=function(){
+  I.classList.add('out');document.body.classList.add('go');setTimeout(function(){I.remove()},900);
+  setTimeout(function(){if(!window.__ok){var e=document.getElementById('aerr');if(e)e.textContent='Unable to connect to the online service. Please check your internet connection and Firebase settings.'}},400);
+ };
+})();
+</script>
+<script type="module">
+window.__ok=1;
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,doc,setDoc,deleteDoc,onSnapshot,getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// Firebase configuration
+const firebaseConfig={
+  apiKey:"AIzaSyCoseSjlFw5dzmQfpSvjjCXO6mQgwzL6YM",
+  authDomain:"stockroom-r3vri.firebaseapp.com",
+  projectId:"stockroom-r3vri",
+  storageBucket:"stockroom-r3vri.firebasestorage.app",
+  messagingSenderId:"320105840143",
+  appId:"1:320105840143:web:a8842f725d2b2c0e396d7a",
+  measurementId:"G-BH6ZY4XB1W"
+};
+const SEED=[["0000020140076","Mousse Cup Choco",250],["0000205823022","Cream Cheese Cup (Red Velvet)",250],["000000513036","Three Milk Cake (Chocolate)",190],["0000000510042","Three Milk Cake (Butterscotch)",190],["0000000335058","Brownie (Choco Fudge)",180],["0000000537087","Three Milk Cake (Lotus)",300]];
+let db={records:{}},cur=null;
+if(!db.records)db.records={};
+const $=id=>document.getElementById(id);
+const num=v=>parseFloat(v)||0;
+const fmt=n=>n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+const app=initializeApp(firebaseConfig),auth=getAuth(app),fs=getFirestore(app);
+let uid=null,unsub=null,remote={},dirty=false,tm=null,mode='in';
+const ser=r=>JSON.stringify({sr:r.sr||'',rows:r.rows.map(x=>[x.code,x.desc,x.price,x.sold,x.inn,x.exp,x.pre])});
+function save(){dirty=true;clearTimeout(tm);tm=setTimeout(flush,600)}
+async function flush(){
+ if(!uid)return;
+ try{
+  for(const d of Object.keys(db.records)){const r=db.records[d],v=ser(r);if(remote[d]!==v){await setDoc(doc(fs,'users',uid,'records',d),{sr:r.sr||'',rows:r.rows});remote[d]=v}}
+  for(const d of Object.keys(remote)){if(!db.records[d]){await deleteDoc(doc(fs,'users',uid,'records',d));delete remote[d]}}
+ }catch(e){toast('Unable to synchronise. Please check your connection.')}
+ dirty=false;
+}
+function toast(m){const t=$('toast');t.textContent=m;t.className='s';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',1800)}
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const sorted=()=>Object.keys(db.records).sort().reverse();
+
+
+function closing(r){return r.rows.map(x=>({code:x.code,v:num(x.pre)+num(x.inn)-num(x.sold)-num(x.exp)}))}
+function newRecord(date){
+  if(!date)return;
+  if(db.records[date]){cur=date;render();toast('A record for this date already exists and has been opened');return}
+  const prevKey=sorted().find(k=>k<date)||sorted()[0];
+  const prev=prevKey&&db.records[prevKey];
+  let rows,sr;
+  if(prev){const cl=Object.fromEntries(closing(prev).map(c=>[c.code,c.v]));
+    rows=prev.rows.map(x=>({code:x.code,desc:x.desc,price:x.price,sold:'',inn:'',exp:'',pre:Math.max(0,cl[x.code]||0)||''}));
+    sr=String(num(prev.sr)+1)}
+  else{rows=SEED.map(s=>({code:s[0],desc:s[1],price:s[2],sold:'',inn:'',exp:'',pre:''}));sr='1'}
+  db.records[date]={sr,rows};cur=date;save();render();toast('Record created successfully')
+}
+function renderList(){
+  const k=sorted();
+  $('dates').innerHTML=k.length?k.map(d=>`<div class="d ${d===cur?'on':''}" data-d="${d}"><span>${d}<br><small>${new Date(d+'T00:00').toLocaleDateString(undefined,{weekday:'long'})}</small></span><small>SR ${db.records[d].sr||'-'}</small></div>`).join(''):'<div class="empty" style="padding:20px 4px">No records available.</div>';
+  $('dates').querySelectorAll('.d').forEach(e=>e.onclick=()=>{cur=e.dataset.d;render()})
+}
+function render(){
+  renderList();
+  const m=$('main');
+  if(!cur||!db.records[cur]){m.innerHTML='<div class="empty">Please select a date or create a new record to proceed.</div>';return}
+  const r=db.records[cur];
+  const f=(i,k,cls='')=>`<input class="${cls}" data-i="${i}" data-k="${k}" value="${String(r.rows[i][k]).replace(/"/g,'&quot;')}" ${['price','sold','inn','exp','pre'].includes(k)?'inputmode="decimal"':''}>`;
+  m.innerHTML=`<div class="meta">
+    <div><label>Date</label><input type="date" id="fd" value="${cur}"></div>
+    <div><label>SR#</label><input id="fsr" value="${r.sr||''}"></div>
+    <div style="margin-left:auto"><button id="del">Delete Record</button></div></div>
+  <div class="tw"><table><thead><tr><th>Sr#</th><th>Item Code</th><th>Description</th><th class="num">Price (PKR)</th><th class="num">Sold</th><th class="num">Total (PKR)</th><th class="num">Stock-In</th><th class="num">Expire</th><th class="num">Pre-stock</th><th></th></tr></thead><tbody>
+  ${r.rows.map((x,i)=>`<tr><td class="n">${i+1}</td><td>${f(i,'code')}</td><td>${f(i,'desc')}</td><td>${f(i,'price','num')}</td><td>${f(i,'sold','num')}</td><td class="t num" id="t${i}">${fmt(num(x.price)*num(x.sold))}</td><td>${f(i,'inn','num')}</td><td>${f(i,'exp','num')}</td><td>${f(i,'pre','num')}</td><td><button class="x" data-rm="${i}" title="Remove">✕</button></td></tr>`).join('')}
+  </tbody></table></div>
+  <div class="row"><button id="add">Add Product</button></div>
+  <div class="sum" id="sum"></div>`;
+  sum();
+  m.querySelectorAll('input[data-k]').forEach(e=>e.oninput=()=>{
+    const i=+e.dataset.i;r.rows[i][e.dataset.k]=e.value;save();
+    $('t'+i).textContent=fmt(num(r.rows[i].price)*num(r.rows[i].sold));sum()});
+  m.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ask('Are you sure you wish to remove this product from this record?',()=>{r.rows.splice(+b.dataset.rm,1);save();render()})});
+  $('add').onclick=()=>{r.rows.push({code:'',desc:'',price:'',sold:'',inn:'',exp:'',pre:''});save();render()};
+  $('fsr').oninput=e=>{r.sr=e.target.value;save();renderList()};
+  $('fd').onchange=e=>{const n=e.target.value;if(!n||n===cur)return;if(db.records[n]){toast('A record already exists for the selected date');e.target.value=cur;return}
+    db.records[n]=r;delete db.records[cur];cur=n;save();render()};
+  $('del').onclick=()=>{ask('Are you sure you wish to delete the record dated '+cur+'?',()=>{delete db.records[cur];cur=sorted()[0]||null;save();render()})}
+}
+function sum(){
+  const r=db.records[cur];if(!r)return;
+  let sold=0,amt=0,inn=0,exp=0,bal=0;
+  r.rows.forEach(x=>{sold+=num(x.sold);amt+=num(x.price)*num(x.sold);inn+=num(x.inn);exp+=num(x.exp);bal+=num(x.pre)+num(x.inn)-num(x.sold)-num(x.exp)});
+  $('sum').innerHTML=`<div><small>Total Units Sold</small><b>${sold}</b></div><div><small>Total Sales</small><b>PKR ${fmt(amt)}</b></div><div><small>Total Stock-In</small><b>${inn}</b></div><div><small>Total Expired</small><b>${exp}</b></div><div><small>Closing Stock</small><b>${bal}</b></div>`
+}
+$('new').onclick=()=>{const d=prompt('Date for the new record (YYYY-MM-DD):',today());if(d&&/^\d{4}-\d{2}-\d{2}$/.test(d.trim()))newRecord(d.trim());else if(d)toast('Use format YYYY-MM-DD')};
+$('prt').onclick=()=>window.print();
+$('exp').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,1)],{type:'application/json'}));a.download='stockroom-backup-'+today()+'.json';a.click()};
+$('imp').onclick=()=>$('file').click();
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const d=JSON.parse(rd.result);if(!d.records)throw 0;if(confirm('Replace current data with this backup?')){db=d;cur=sorted()[0]||null;save();render();toast('Backup restored')}}catch(x){toast('Invalid backup file')}};rd.readAsText(f);e.target.value=''};
+function modal(msg,o={}){
+ const m=document.createElement('div');m.className='mod';
+ m.innerHTML='<div class="box"><p>'+msg+'</p>'+(o.ta!==undefined?'<textarea></textarea>':'')+'<div class="row"><button class="p ok">'+(o.ok||'OK')+'</button>'+(o.cancel===false?'':'<button class="no">Cancel</button>')+'</div></div>';
+ const t=m.querySelector('textarea');if(t)t.value=o.ta;
+ const no=m.querySelector('.no');if(no)no.onclick=()=>m.remove();
+ m.querySelector('.ok').onclick=()=>{const v=t?t.value:null;m.remove();if(o.cb)o.cb(v)};
+ document.body.appendChild(m);if(t){t.focus();if(o.ta)t.select()}
+}
+function ask(msg,cb){modal(msg,{ok:'Yes',cb})}
+$('nd').value=today();
+$('new').onclick=()=>{const d=$('nd').value||today();newRecord(d)};
+$('exp').onclick=()=>modal('Please copy the backup text below and store it in a safe location:',{ta:JSON.stringify(db),ok:'Copy',cancel:false,cb:v=>{try{navigator.clipboard.writeText(v)}catch(e){}toast('Backup copied to clipboard')}});
+$('imp').onclick=()=>modal('Please paste the backup text to restore. Existing data will be replaced:',{ta:'',ok:'Restore',cb:v=>{try{const d=JSON.parse(v);if(!d.records)throw 0;db=d;cur=sorted()[0]||null;save();render();toast('Backup restored successfully')}catch(x){toast('The backup text provided is invalid')}}});
+const em=u=>u.toLowerCase()+'@stockroom.app';
+function setMode(m){mode=m;$('apu').style.display=m==='up'?'block':'none';$('ago').textContent=m==='up'?'Create Account':'Sign In';$('tin').className=m==='in'?'p':'';$('tup').className=m==='up'?'p':'';$('aerr').textContent=''}
+$('tin').onclick=()=>setMode('in');$('tup').onclick=()=>setMode('up');
+$('ago').onclick=async()=>{
+ const u=$('au').value.trim(),p=$('ap').value,pu=$('apu').value.trim(),e=$('aerr');
+ if(!/^[a-zA-Z0-9_.]{3,24}$/.test(u)){e.textContent='Username must be 3 to 24 characters (letters, numbers, . or _).';return}
+ if(p.length<6){e.textContent='Password must be at least 6 characters.';return}
+ if(mode==='up'&&!pu){e.textContent='Please state the purpose of this account.';return}
+ try{
+  if(mode==='up'){const c=await createUserWithEmailAndPassword(auth,em(u),p);await setDoc(doc(fs,'users',c.user.uid),{username:u.toLowerCase(),purpose:pu,created:Date.now()});$('who').textContent=u.toLowerCase()+' \u00b7 '+pu}
+  else await signInWithEmailAndPassword(auth,em(u),p);
+ }catch(x){const c=x.code||'';e.textContent=c.includes('email-already')?'This username is already taken.':(c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found'))?'Incorrect username or password.':'Unable to continue ('+c+').'}
+};
+$('out').onclick=()=>signOut(auth);
+onAuthStateChanged(auth,async u=>{
+ if(unsub){unsub();unsub=null}
+ if(!u){uid=null;db={records:{}};cur=null;remote={};$('auth').style.display='flex';$('who').textContent='';$('ap').value='';render();return}
+ uid=u.uid;$('auth').style.display='none';
+ try{const p=await getDoc(doc(fs,'users',uid));if(p.exists())$('who').textContent=p.data().username+' \u00b7 '+p.data().purpose}catch(e){}
+ unsub=onSnapshot(collection(fs,'users',uid,'records'),snap=>{
+  if(snap.metadata.hasPendingWrites)return;
+  const r={},rm={};snap.forEach(d=>{const v=d.data();r[d.id]={sr:v.sr||'',rows:v.rows||[]};rm[d.id]=ser(r[d.id])});
+  remote=rm;if(dirty)return;
+  db.records=r;if(!cur||!r[cur])cur=sorted()[0]||null;
+  const a=document.activeElement;if(a&&a.tagName==='INPUT'&&a.closest('#main'))renderList();else render();
+ },()=>toast('Unable to load records. Please check your connection.'));
+});
+render();
+</script>
+</body>
+</html>
