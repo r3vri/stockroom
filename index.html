@@ -108,6 +108,13 @@ td.t,.sum b{font-variant-numeric:tabular-nums}
 header,.wrap,.nav{opacity:0;transform:translateY(14px);transition:opacity .9s .3s ease,transform .9s .3s cubic-bezier(.2,.8,.2,1)}
 body.go header,body.go .wrap,body.go .nav{opacity:1;transform:none}
 input.miss{border-color:rgba(214,69,69,.55);background:rgba(214,69,69,.07)}
+input[readonly]{cursor:default}
+input[readonly]:hover{border-color:transparent}
+input[readonly]:focus{background:transparent;border-color:transparent}
+.bt{font-size:9px;letter-spacing:.14em;padding:2px 7px;border-radius:99px;background:var(--ink);color:var(--bg);margin-left:6px;vertical-align:2px;font-weight:600}
+.pr{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:13px}
+.pr .ln{color:var(--mut);font-size:12px;margin-bottom:8px;word-break:break-word}
+.pr select{margin-bottom:8px}
 .warn{background:rgba(214,69,69,.08);border:1px solid rgba(214,69,69,.3);color:#d64545;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px}
 /* role + nav */
 .pill{display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;padding:8px 13px;border-radius:99px;border:1px solid var(--line);background:var(--card)}
@@ -216,7 +223,7 @@ table.mini td{padding:9px 6px}
 
 <div class="wrap" id="vr" style="display:none">
   <aside class="card side">
-    <div class="lbl" style="margin-top:0">Record Date</div><div id="ndw"></div><button class="p" id="new" style="width:100%;margin-top:10px">Create New Record</button>
+    <button class="p" id="new" style="width:100%">New Record</button><button id="beta" style="width:100%;margin-top:8px">Smart entry <span class="bt">BETA</span></button>
     <div class="dates" id="dates"></div>
   </aside>
   <main class="card" id="main"></main>
@@ -347,8 +354,10 @@ function newRecord(date){
   else{rows=[];sr='1'}
   db.records[date]={sr,rows};cur=date;save();render();toast(prev?'Record created successfully':'First record created. Tap Add Product to begin.')
 }
+const nextDate=()=>{const ks=Object.keys(db.records).sort();return ks.length?addDays(ks[ks.length-1],1):today()};
 function renderList(){
   const k=sorted();
+  $('new').textContent='New Record · '+fd(nextDate());
   $('dates').innerHTML=k.length?k.map(d=>`<div class="d ${d===cur?'on':''}" data-d="${d}"><span>${fd(d)}<br><small>${wd(d)}</small></span><small>SR ${db.records[d].sr||'-'}</small></div>`).join(''):'<div class="empty" style="padding:20px 4px">No records available.</div>';
   $('dates').querySelectorAll('.d').forEach(e=>e.onclick=()=>{cur=e.dataset.d;render()})
 }
@@ -357,40 +366,180 @@ function render(){
   const m=$('main'),adm=role==='admin';
   if(!cur||!db.records[cur]){m.innerHTML='<div class="empty">Please select a date or create a new record to proceed.</div>';return}
   const r=db.records[cur];
-  const f=(i,k,cls='')=>{const miss=k==='cost'&&String(r.rows[i].cost)==='';return `<input class="${cls}${miss?' miss':''}" data-i="${i}" data-k="${k}" value="${esc(r.rows[i][k])}" ${k==='cost'?'placeholder="required"':''} ${['price','cost','sold','inn','exp','pre'].includes(k)?'inputmode="decimal"':''}>`};
+  const avail=x=>rowM(x).close;
+  const f=(i,k,cls='')=>{const ed=adm||k==='sold';const miss=k==='cost'&&String(r.rows[i].cost)==='';return `<input class="${cls}${miss?' miss':''}" data-i="${i}" data-k="${k}" value="${esc(r.rows[i][k])}" ${ed?'':'readonly tabindex="-1"'} ${k==='cost'?'placeholder="required"':''} ${['price','cost','sold','inn','exp','pre'].includes(k)?'inputmode="decimal"':''}>`};
   const missing=r.rows.filter(x=>!hasCost(x)).length;
-  const cols=adm?12:10;
+  const cols=adm?11:8;
   m.innerHTML=`<div class="meta">
-    <div><label>Date</label><div id="fdw"></div></div>
-    <div><label>SR#</label><input id="fsr" value="${esc(r.sr||'')}"></div>
-    <div style="margin-left:auto"><button id="del">Delete Record</button></div></div>
-  <div class="sub" style="margin:-4px 0 14px" id="fdl">${wd(cur)}, ${fd(cur)}</div>
+    <div><label>Date</label>${adm?'<div id="fdw"></div>':`<div style="padding:8px 0;font-weight:600">${fd(cur)}</div>`}</div>
+    <div><label>SR#</label><input id="fsr" value="${esc(r.sr||'')}" ${adm?'':'readonly tabindex="-1"'}></div>
+    ${adm?'<div style="margin-left:auto"><button id="del">Delete Record</button></div>':''}</div>
+  <div class="sub" style="margin:-4px 0 14px">${wd(cur)}, ${fd(cur)}${adm?'':' · Manager mode: only the Sold column can be edited'}</div>
   ${adm&&missing?`<div class="warn">${missing} product${missing>1?'s have':' has'} no cost price yet. Fill the red Cost fields so profit is calculated correctly.</div>`:''}
-  <div class="tw"><table><thead><tr><th>Sr#</th><th>Item Code</th><th>Description</th><th class="num">Price (PKR)</th>${adm?'<th class="num">Cost (PKR)</th>':''}<th class="num">Sold</th><th class="num">Total (PKR)</th>${adm?'<th class="num">Profit (PKR)</th>':''}<th class="num">Stock-In</th><th class="num">Expire</th><th class="num">Pre-stock</th><th></th></tr></thead><tbody>
-  ${r.rows.length?r.rows.map((x,i)=>`<tr><td class="n">${i+1}</td><td>${f(i,'code')}</td><td>${f(i,'desc')}</td><td>${f(i,'price','num')}</td>${adm?`<td>${f(i,'cost','num')}</td>`:''}<td>${f(i,'sold','num')}</td><td class="t num" id="t${i}">${fmt(num(x.price)*num(x.sold))}</td>${adm?`<td class="t num" id="p${i}">${hasCost(x)?fmt((num(x.price)-num(x.cost))*num(x.sold)):'—'}</td>`:''}<td>${f(i,'inn','num')}</td><td>${f(i,'exp','num')}</td><td>${f(i,'pre','num')}</td><td><button class="x" data-rm="${i}" title="Remove">✕</button></td></tr>`).join(''):`<tr><td colspan="${cols}"><div class="empty">No products in this record yet. Tap “Add Product” to begin.</div></td></tr>`}
+  <div class="tw"><table><thead><tr><th>Sr#</th><th>Item Code</th><th>Description</th><th class="num">Price (PKR)</th>${adm?'<th class="num">Cost (PKR)</th>':''}<th class="num">Sold</th><th class="num">Total (PKR)</th>${adm?'<th class="num">Profit (PKR)</th>':''}<th class="num">Pre-stock</th><th class="num">Stock Available</th>${adm?'<th></th>':''}</tr></thead><tbody>
+  ${r.rows.length?r.rows.map((x,i)=>`<tr><td class="n">${i+1}</td><td>${f(i,'code')}</td><td>${f(i,'desc')}</td><td>${f(i,'price','num')}</td>${adm?`<td>${f(i,'cost','num')}</td>`:''}<td>${f(i,'sold','num')}</td><td class="t num" id="t${i}">${fmt(num(x.price)*num(x.sold))}</td>${adm?`<td class="t num" id="p${i}">${hasCost(x)?fmt((num(x.price)-num(x.cost))*num(x.sold)):'—'}</td>`:''}<td>${f(i,'pre','num')}</td>${adm?`<td><input class="num" data-i="${i}" data-k="avail" value="${avail(x)}" inputmode="decimal"></td>`:`<td class="t num" id="a${i}">${avail(x)}</td>`}${adm?`<td><button class="x" data-rm="${i}" title="Remove">✕</button></td>`:''}</tr>`).join(''):`<tr><td colspan="${cols}"><div class="empty">${adm?'No products in this record yet. Tap “Add Product” to begin.':'No products yet. Ask the admin to add them.'}</div></td></tr>`}
   </tbody></table></div>
-  <div class="row"><button id="add">Add Product</button></div>
+  <div class="row">${adm?'<button id="add">Add Product</button>':''}<button id="beta2">Smart entry <span class="bt">BETA</span></button></div>
   <div class="sum" id="sum"></div>`;
   sum();
-  mountDs($('fdw'),cur,n=>{
+  const upd=i=>{
+    const x=r.rows[i];$('t'+i).textContent=fmt(num(x.price)*num(x.sold));
+    const pe=$('p'+i);if(pe)pe.textContent=hasCost(x)?fmt((num(x.price)-num(x.cost))*num(x.sold)):'—';
+    const a=avail(x),ae=$('a'+i);if(ae)ae.textContent=a;
+    const ai=m.querySelector('[data-i="'+i+'"][data-k="avail"]');if(ai&&document.activeElement!==ai)ai.value=a;
+    const pi=m.querySelector('[data-i="'+i+'"][data-k="pre"]');if(pi&&document.activeElement!==pi)pi.value=x.pre;
+    sum()};
+  if(adm)mountDs($('fdw'),cur,n=>{
     if(!n||n===cur)return;
     if(db.records[n]){toast('A record already exists for the selected date');mountDs($('fdw'),cur,()=>{});return}
     db.records[n]=r;delete db.records[cur];cur=n;save();render()});
   m.querySelectorAll('input[data-k]').forEach(e=>e.oninput=()=>{
-    const i=+e.dataset.i,k=e.dataset.k;r.rows[i][k]=e.value;save();
-    $('t'+i).textContent=fmt(num(r.rows[i].price)*num(r.rows[i].sold));
-    const pe=$('p'+i);if(pe)pe.textContent=hasCost(r.rows[i])?fmt((num(r.rows[i].price)-num(r.rows[i].cost))*num(r.rows[i].sold)):'—';
+    const i=+e.dataset.i,k=e.dataset.k;
+    if(k==='avail'){if(e.value.trim()==='')return;const x=r.rows[i];x.pre=String(num(e.value)-num(x.inn)+num(x.sold)+num(x.exp));save();upd(i);return}
+    r.rows[i][k]=e.value;save();
     if(k==='cost')e.classList.toggle('miss',e.value==='');
-    sum()});
+    upd(i)});
   m.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ask('Are you sure you wish to remove this product from this record?',()=>{r.rows.splice(+b.dataset.rm,1);save();render()})});
-  $('add').onclick=()=>{r.rows.push({code:'',desc:'',price:'',cost:'',sold:'',inn:'',exp:'',pre:''});save();render()};
-  $('fsr').oninput=e=>{r.sr=e.target.value;save();renderList()};
-  $('del').onclick=()=>{ask('Are you sure you wish to delete the record dated '+fd(cur)+'?',()=>{delete db.records[cur];cur=sorted()[0]||null;save();render()})}
+  if(adm){
+    $('add').onclick=()=>{r.rows.push({code:'',desc:'',price:'',cost:'',sold:'',inn:'',exp:'',pre:''});save();render()};
+    $('fsr').oninput=e=>{r.sr=e.target.value;save();renderList()};
+    $('del').onclick=()=>{ask('Are you sure you wish to delete the record dated '+fd(cur)+'?',()=>{delete db.records[cur];cur=sorted()[0]||null;save();render()})};
+  }
+  $('beta2').onclick=openBeta;
 }
 function sum(){
   const r=db.records[cur];if(!r)return;
   const a=agg(cur,r),adm=role==='admin';
-  $('sum').innerHTML=`<div><small>Total Units Sold</small><b>${a.units}</b></div><div><small>Total Sales</small><b>PKR ${fmt(a.sales)}</b></div>${adm?`<div><small>Gross Profit</small><b>PKR ${fmt(a.profit)}</b></div><div><small>Expired Loss</small><b>PKR ${fmt(a.expLoss)}</b></div>`:''}<div><small>Total Stock-In</small><b>${a.inn}</b></div><div><small>Total Expired</small><b>${a.expU}</b></div><div><small>Closing Stock</small><b>${a.close}</b></div>`
+  $('sum').innerHTML=`<div><small>Total Units Sold</small><b>${a.units}</b></div><div><small>Total Sales</small><b>PKR ${fmt(a.sales)}</b></div>${adm?`<div><small>Gross Profit</small><b>PKR ${fmt(a.profit)}</b></div><div><small>Expired Loss</small><b>PKR ${fmt(a.expLoss)}</b></div>`:''}<div><small>Total Stock-In</small><b>${a.inn}</b></div><div><small>Total Expired</small><b>${a.expU}</b></div><div><small>Stock Available</small><b>${a.close}</b></div>`
+}
+/* BETA-START */
+const KW={
+ sold:['sold','sale','sales','sell','sells','solds','out','sld','sod','sol','solt','sole'],
+ cost:['cost','costs','cp','costing','purchase'],
+ price:['price','rate','sp','mrp','selling','prize'],
+ stock:['stock','stocks','stok','stck','available','avail','qty','quantity','left','remaining','balance','closing'],
+ inn:['in','added','add','received','receive','arrived','restock','stockin','incoming'],
+ exp:['expired','expire','expires','expiry','exp','expir','waste','wasted','damaged','spoiled','spoil']
+};
+const FILLER=new Set(['today','todays','tdy','now','is','are','was','were','at','rs','pkr','rupees','rupee','of','the','a','an','to','units','unit','pcs','pc','piece','pieces','and','for','only','by','per','each','total','number','no','been','has','have','had','item','items']);
+const ALIAS=[];Object.keys(KW).forEach(f=>KW[f].forEach(w=>ALIAS.push([w,f])));
+const KWSET=new Set(ALIAS.map(a=>a[0]));
+function osa(a,b){
+ const m=a.length,n=b.length,d=[];
+ for(let i=0;i<=m;i++)d[i]=[i];
+ for(let j=0;j<=n;j++)d[0][j]=j;
+ for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){
+  const c=a[i-1]===b[j-1]?0:1;
+  d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);
+  if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1);
+ }
+ return d[m][n];
+}
+function kwOf(w){
+ for(const a of ALIAS)if(a[0]===w)return a[1];
+ if(w.length<4)return null;
+ let best=null,bd=9;
+ for(const a of ALIAS){
+  if(a[0].length<4)continue;
+  const lim=a[0].length>=6?2:1;
+  if(Math.abs(a[0].length-w.length)>lim)continue;
+  const d=osa(w,a[0]);
+  if(d<=lim&&d<bd){bd=d;best=a[1]}
+ }
+ return best;
+}
+function splitWord(w){
+ if(w.length<6||kwOf(w)||FILLER.has(w))return [w];
+ for(let k=3;k<=w.length-2;k++){
+  const l=w.slice(0,k),r=w.slice(k);
+  if((kwOf(l)&&(kwOf(r)||FILLER.has(r)))||(FILLER.has(l)&&kwOf(r)))return [l,r];
+ }
+ return [w];
+}
+const cap=s=>s.replace(/\b[a-z]/g,c=>c.toUpperCase());
+function parseLine(line,rows){
+ const s=line.toLowerCase().replace(/(\d),(\d{3})/g,'$1$2').replace(/[^a-z0-9.\s]/g,' ').replace(/([a-z])(\d)/g,'$1 $2').replace(/(\d)([a-z])/g,'$1 $2').replace(/\.(?!\d)/g,' ');
+ const tk=s.match(/\d+(?:\.\d+)?|[a-z]+/g)||[];
+ let best=-1,bs=0,tie=false,bestU=new Set();
+ rows.forEach((r,ri)=>{
+  const ws=Array.from(new Set((String(r.desc).toLowerCase().match(/[a-z]+/g)||[]).filter(w=>w.length>=3)));
+  let sc=0;const u=new Set();
+  ws.forEach(w=>tk.forEach((t,ti)=>{
+   if(!/^[a-z]+$/.test(t))return;
+   if(KWSET.has(t)&&t!==w)return;
+   if(t===w||(w.length>=5&&t.length>=4&&osa(t,w)<=1)||(t.length>=4&&w.startsWith(t))){sc+=w.length;u.add(ti)}
+  }));
+  tk.forEach((t,ti)=>{if(/^\d+$/.test(t)&&r.code&&(String(r.code)===t||(t.length>=4&&String(r.code).endsWith(t)))){sc+=100;u.add(ti)}});
+  if(sc>bs){bs=sc;best=ri;tie=false;bestU=u}else if(sc===bs&&sc>0){tie=true}
+ });
+ const product=(bs>0&&!tie)?best:null;
+ const items=[];
+ tk.forEach((t,ti)=>{if(bestU.has(ti))return;if(/^\d/.test(t))items.push({n:parseFloat(t)});else splitWord(t).forEach(w=>items.push({w}))});
+ const f={},unk=[];let pf=null,pn=null;
+ for(let i=0;i<items.length;i++){
+  const it=items[i];
+  if(it.n!==undefined){if(pf){f[pf]=it.n;pf=null}else pn=it.n;continue}
+  const w=it.w;if(FILLER.has(w))continue;
+  let k=kwOf(w);
+  if(!k){unk.push(w);continue}
+  if(k==='stock'){const nx=items[i+1];if(nx&&nx.w){const nk=kwOf(nx.w);if(nk==='inn'){k='inn';i++}else if(nx.w==='out'){k='sold';i++}}}
+  if(k==='price'&&pf==='cost')continue;
+  if(pn!==null){f[k]=pn;pn=null;pf=null}else pf=k;
+ }
+ return {line,product,amb:tie&&bs>0,f,guess:unk.join(' ')};
+}
+/* BETA-END */
+function openBeta(){
+ if(!cur||!db.records[cur]){toast('Select or create a record first');return}
+ const adm=role==='admin',r=db.records[cur],BOV={};let BI=[];
+ const m=document.createElement('div');m.className='mod';m.style.alignItems='flex-start';m.style.overflow='auto';
+ m.innerHTML=`<div class="box" style="max-width:680px;margin:20px auto"><p style="font-weight:600;margin-bottom:4px">Smart entry <span class="bt">BETA</span></p><div class="sub" style="margin-bottom:10px">Type or paste messy notes, one product per line. Typos and missing spaces are fixed automatically. It applies to the record dated ${fd(cur)}.${adm?'':' <b>Manager mode: only Sold is applied.</b>'}<br>Example: <i>mousse cost100 sodl today 10 stock in100</i></div><textarea id="bta" placeholder="mousse cost100 sodl today 10 stock in100"></textarea><div class="row" style="justify-content:space-between;align-items:center"><span class="sub">Sold, Stock-in and Expired:</span><select id="btm" style="width:auto"><option value="set">Replace existing values</option><option value="add">Add to existing values</option></select></div><div id="btp"></div><div class="row"><button class="p" id="btok">Apply</button><button id="btno">Close</button></div></div>`;
+ document.body.appendChild(m);
+ const ta=m.querySelector('#bta'),pv=m.querySelector('#btp'),md=m.querySelector('#btm');
+ const LB={sold:'Sold',cost:'Cost',price:'Price',inn:'Stock-in',exp:'Expired',stock:'Stock available'};
+ function prev(){
+  const lines=ta.value.split(/\n|;/).map(x=>x.trim()).filter(Boolean),mode=md.value;let last='';
+  BI=lines.map(l=>{
+   const p=parseLine(l,r.rows),key=l.toLowerCase();
+   let t=BOV[key]!==undefined?BOV[key]:(p.product!==null?String(p.product):(adm&&p.guess?'new':''));
+   if(t===''&&r.rows.length===1)t='0';
+   if(t===''&&last!==''&&last!=='new')t=last;
+   if(t!=='')last=t;
+   return Object.assign({},p,{target:t,key});
+  });
+  pv.innerHTML=BI.map((p,idx)=>{
+   const opts=r.rows.map((x,i)=>`<option value="${i}"${p.target===String(i)?' selected':''}>${esc(x.desc||x.code||'Unnamed')}</option>`).join('');
+   const nw=adm&&p.guess?`<option value="new"${p.target==='new'?' selected':''}>+ New product: ${esc(cap(p.guess))}</option>`:'';
+   const chips=Object.keys(p.f).map(k=>{const ok=adm||k==='sold',add=ok&&mode==='add'&&['sold','inn','exp'].includes(k);return `<span class="chip${ok?'':' r'}" style="margin:0 6px 4px 0">${LB[k]} ${add?'+':''}${p.f[k]}${ok?'':' · admin only'}</span>`}).join('')||'<span class="chip r">Nothing understood</span>';
+   return `<div class="pr"><div class="ln">${esc(p.line)}</div><select data-bi="${idx}"><option value="">${p.amb?'Several products match. Choose one…':'Choose product…'}</option>${opts}${nw}</select><div>${chips}</div></div>`;
+  }).join('');
+ }
+ ta.oninput=prev;md.onchange=prev;
+ pv.onchange=e=>{const t=e.target;if(t.dataset.bi!==undefined){const b=BI[+t.dataset.bi];b.target=t.value;BOV[b.key]=t.value}};
+ m.querySelector('#btno').onclick=()=>m.remove();
+ m.querySelector('#btok').onclick=()=>{
+  const mode=md.value;let n=0,skip=0;
+  BI.forEach(it=>{
+   let row=null;
+   if(it.target==='new'){if(!adm){skip++;return}row={code:'',desc:cap(it.guess)||'New product',price:'',cost:'',sold:'',inn:'',exp:'',pre:''};r.rows.push(row)}
+   else if(it.target!==''&&r.rows[+it.target])row=r.rows[+it.target];
+   if(!row||!Object.keys(it.f).length){skip++;return}
+   let did=false;const f=it.f;
+   if(f.sold!==undefined){row.sold=String(mode==='add'?num(row.sold)+f.sold:f.sold);did=true}
+   if(adm){
+    if(f.inn!==undefined){row.inn=String(mode==='add'?num(row.inn)+f.inn:f.inn);did=true}
+    if(f.exp!==undefined){row.exp=String(mode==='add'?num(row.exp)+f.exp:f.exp);did=true}
+    if(f.price!==undefined){row.price=String(f.price);did=true}
+    if(f.cost!==undefined){row.cost=String(f.cost);did=true}
+    if(f.stock!==undefined){row.pre=String(f.stock-num(row.inn)+num(row.sold)+num(row.exp));did=true}
+   }
+   if(did)n++;else skip++;
+  });
+  if(n)save();
+  m.remove();render();
+  toast(n?('Applied '+n+' line'+(n>1?'s':'')+(skip?', '+skip+' skipped':'')):'Nothing was applied');
+ };
+ ta.focus();prev();
 }
 /* ---------- modal helpers ---------- */
 function modal(msg,o={}){
@@ -491,7 +640,7 @@ const kp=(l,n,o={})=>`<div class="kpi${o.hero?' hero':''}" style="animation-dela
 function dash(){
  const el=$('vd'),ks=Object.keys(db.records).sort(),adm=role==='admin';
  if(!ks.length){
-  el.innerHTML=`<div class="dash"><div class="dh"><div><h2>Welcome${S.biz?', '+esc(S.biz):''}</h2><div class="sub">Your workspace is empty. Let's set it up.</div></div></div><div class="pnl setup"><h3>Getting started</h3><ol><li>Open <b>Records</b> and create your first record for any date.</li><li>Tap <b>Add Product</b> and enter every item: code, name and selling price.</li><li>Switch to <b>Admin</b> and enter the cost price of every item. <span>Profit cannot be calculated without it.</span></li><li>Fill in sold, stock-in, expired and pre-stock. This dashboard builds itself.</li></ol><button class="p" id="go1">Go to Records</button></div></div>`;
+  el.innerHTML=`<div class="dash"><div class="dh"><div><h2>Welcome${S.biz?', '+esc(S.biz):''}</h2><div class="sub">Your workspace is empty. Let's set it up.</div></div></div><div class="pnl setup"><h3>Getting started</h3><ol><li>Open <b>Records</b> and create your first record for any date.</li><li>Switch to <b>Admin</b>, tap <b>Add Product</b> and enter every item: code, name, selling price and cost price. <span>Profit cannot be calculated without cost.</span></li><li>Each day, create the next record and enter what was sold. This dashboard builds itself.</li></ol><button class="p" id="go1">Go to Records</button></div></div>`;
   $('go1').onclick=()=>setView('rec');return;
  }
  const days=ks.map(k=>agg(k,db.records[k])),endD=ks[ks.length-1];
@@ -606,9 +755,8 @@ function renderSet(){
  $('imp').onclick=()=>modal('Please paste the backup text to restore. Existing data will be replaced:',{ta:'',ok:'Restore',cb:v=>{try{const d=JSON.parse(v);if(!d.records)throw 0;Object.keys(d.records).forEach(k=>{d.records[k]={sr:d.records[k].sr||'',rows:(d.records[k].rows||[]).map(nr)}});db=d;cur=sorted()[0]||null;save();toast('Backup restored successfully')}catch(x){toast('The backup text provided is invalid')}}});
 }
 /* ---------- sidebar new record ---------- */
-ndv=today();
-mountDs($('ndw'),ndv,v=>{ndv=v});
-$('new').onclick=()=>newRecord(ndv);
+$('new').onclick=()=>newRecord(nextDate());
+$('beta').onclick=openBeta;
 /* ---------- auth ---------- */
 const em=u=>u.toLowerCase()+'@stockroom.app';
 function setMode(m){mode=m;$('apu').style.display=m==='up'?'block':'none';$('ago').textContent=m==='up'?'Create Account':'Sign In';$('tin').className=m==='in'?'p':'';$('tup').className=m==='up'?'p':'';$('aerr').textContent=''}
