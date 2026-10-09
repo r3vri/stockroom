@@ -50,12 +50,13 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,
 @keyframes sh{to{left:130%}}
 .foot{position:absolute;bottom:calc(22px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-size:10px;letter-spacing:.4em;color:rgba(255,255,255,.35);text-transform:uppercase}
 /* app */
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:20px 24px;max-width:1200px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:20px 24px 14px;max-width:1200px;margin:auto}
 h1{font-size:20px;font-weight:600;margin:0;letter-spacing:-.01em}
 h1 b{color:var(--acc)}
 .sub{color:var(--mut);font-size:13px;margin-top:2px}
 .wrap{max-width:1200px;margin:auto;padding:0 24px 40px;display:grid;grid-template-columns:230px 1fr;gap:20px}
-@media(max-width:800px){.wrap{grid-template-columns:1fr;padding:0 14px 30px}header{padding:16px 14px}}
+.wrap.one{grid-template-columns:1fr}
+@media(max-width:800px){.wrap{grid-template-columns:1fr;padding:0 14px 30px}header{padding:16px 14px 10px}.nav{padding:0 14px!important}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
 button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:9px;cursor:pointer;transition:.15s}
 button:hover{border-color:var(--acc);color:var(--acc)}
@@ -63,6 +64,11 @@ button.p{background:var(--acc);border-color:var(--acc);color:var(--bg)}
 button.p:hover{opacity:.85;color:var(--bg)}
 input{font:inherit;color:var(--ink);background:transparent;border:1px solid transparent;border-radius:7px;padding:6px 7px;width:100%;min-width:0}
 input:hover{border-color:var(--line)}input:focus{outline:none;border-color:var(--acc);background:var(--acc2)}
+select{font:inherit;font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 6px;width:100%;min-width:0;cursor:pointer}
+select:focus{outline:none;border-color:var(--acc)}
+.ds{display:grid;grid-template-columns:.8fr 1.5fr 1fr;gap:6px}
+.ds .dl2{display:block;font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.meta .ds{min-width:300px}
 .dates{display:flex;flex-direction:column;gap:6px;max-height:60vh;overflow:auto;margin-top:12px}
 .d{display:flex;justify-content:space-between;align-items:center;padding:9px 11px;border-radius:9px;cursor:pointer;border:1px solid transparent}
 .d:hover{background:var(--acc2)}
@@ -70,7 +76,7 @@ input:hover{border-color:var(--line)}input:focus{outline:none;border-color:var(-
 .d small{color:var(--mut);font-weight:400}
 .meta{display:flex;gap:16px;flex-wrap:wrap;align-items:end;margin-bottom:14px}
 .meta label{font-size:12px;color:var(--mut);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em}
-.meta input{border:1px solid var(--line);width:170px}
+.meta input{border:1px solid var(--line);width:120px}
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:820px}
 th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-weight:600}
@@ -85,11 +91,10 @@ td.t{font-weight:600;padding:0 8px;white-space:nowrap}
 .sum b{font-size:20px}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .empty{color:var(--mut);text-align:center;padding:50px 10px}
-#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(30px);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:13px;opacity:0;transition:.3s;pointer-events:none}
+#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(30px);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:200}
 #toast.s{opacity:1;transform:translateX(-50%)}
-.mod{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px}.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;width:100%;max-width:420px}.box p{margin:0 0 12px}.box textarea{width:100%;height:140px;font:12px monospace;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;resize:vertical}.box .row{justify-content:flex-end;margin-top:12px}.lbl{font-size:12px;color:var(--mut);margin:12px 0 4px;text-transform:uppercase;letter-spacing:.08em}#nd{border:1px solid var(--line)}
+.mod{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px}.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;width:100%;max-width:420px}.box p{margin:0 0 12px}.box textarea{width:100%;height:140px;font:12px monospace;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;resize:vertical}.box .row{justify-content:flex-end;margin-top:12px}.lbl{font-size:12px;color:var(--mut);margin:12px 0 4px;text-transform:uppercase;letter-spacing:.08em}
 .box input{border:1px solid var(--line);margin-bottom:10px}
-.gs{position:relative;margin-top:34px;padding:13px 38px;border-radius:99px;border:1px solid #fff;background:#fff;color:#000;letter-spacing:.22em;text-transform:uppercase;font-size:12px;cursor:pointer;opacity:0;animation:in 1s 8.4s forwards}.gs:hover{background:transparent;color:#fff;border-color:#fff}.gs:disabled{cursor:default}
 body{-webkit-font-smoothing:antialiased}
 .hm{width:22px;height:22px;margin-right:9px;vertical-align:-3px;color:var(--acc)}
 .card{border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 18px 40px -22px rgba(0,0,0,.18)}
@@ -100,13 +105,90 @@ td.t,.sum b{font-variant-numeric:tabular-nums}
 .sum div{background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden;padding-left:18px}
 .sum div::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc)}
 .d{transition:background .15s}
-header,.wrap{opacity:0;transform:translateY(14px);transition:opacity .9s .3s ease,transform .9s .3s cubic-bezier(.2,.8,.2,1)}
-body.go header,body.go .wrap{opacity:1;transform:none}
-@media print{header,.wrap{opacity:1!important;transform:none!important}}
-@media print{#intro,header button,.side,.row,.x{display:none!important}.wrap{display:block}}
+header,.wrap,.nav{opacity:0;transform:translateY(14px);transition:opacity .9s .3s ease,transform .9s .3s cubic-bezier(.2,.8,.2,1)}
+body.go header,body.go .wrap,body.go .nav{opacity:1;transform:none}
+input.miss{border-color:rgba(214,69,69,.55);background:rgba(214,69,69,.07)}
+.warn{background:rgba(214,69,69,.08);border:1px solid rgba(214,69,69,.3);color:#d64545;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px}
+/* role + nav */
+.pill{display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;padding:8px 13px;border-radius:99px;border:1px solid var(--line);background:var(--card)}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--mut)}
+body[data-role=admin] .pill i{background:#2ecc71;box-shadow:0 0 8px #2ecc71}
+.nav{display:flex;gap:4px;max-width:1200px;margin:0 auto 16px;padding:0 24px;overflow-x:auto}
+.nav button{border:none;background:none;color:var(--mut);padding:9px 18px;border-radius:99px;font-weight:500;white-space:nowrap}
+.nav button:hover{color:var(--ink)}
+.nav button.on,.nav button.on:hover{background:var(--ink);color:var(--bg)}
+body[data-role=manager] #nset::after{content:" \1F512";font-size:11px}
+/* dashboard */
+.dash{display:flex;flex-direction:column;gap:14px}
+.dh{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+.dh h2{font-size:30px;font-weight:200;letter-spacing:-.025em;margin:0}
+.chips{display:flex;gap:2px;background:var(--acc2);padding:4px;border-radius:99px}
+.chips button{border:none;background:none;padding:6px 14px;border-radius:99px;font-size:13px;color:var(--mut)}
+.chips button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes growy{from{transform:scaleY(0)}}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.kpi{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 15px;animation:up .6s both}
+.kpi small{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);font-weight:600}
+.kpi b{display:block;font-size:27px;font-weight:300;margin:10px 0 8px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi.hero{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.kpi.hero small{color:var(--bg);opacity:.6}
+.kpi.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(128,128,128,.35),transparent 70%)}
+.kpi.lock{cursor:pointer;border-style:dashed}
+.kpi.lock b{font-size:17px;font-weight:500}
+.dl{font-size:12px;font-weight:600;font-style:normal;color:var(--mut)}
+.dl.up{color:#1f9d55}.dl.dn{color:#d64545}
+.kpi.hero .dl.up{color:#3ddc84}.kpi.hero .dl.dn{color:#ff7a7a}
+.kpi.hero .dl{color:var(--bg);opacity:.7}.kpi.hero .dl.up,.kpi.hero .dl.dn{opacity:1}
+.pnl{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;animation:up .7s .15s both;min-width:0}
+.pnl h3{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--mut);margin:0 0 14px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.g2{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:800px){.g2,.g3{grid-template-columns:1fr}}
+.cw{position:relative}
+.ch{width:100%;height:auto;display:block;touch-action:pan-y}
+.ch text{fill:var(--mut);font-size:10px;font-family:inherit}
+.ch .gl{stroke:var(--line);stroke-width:1}
+.ch .l1{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.ch .l2{fill:none;stroke:var(--mut);stroke-width:1.6;stroke-dasharray:4 4;stroke-linejoin:round}
+.ch .cx{stroke:var(--mut);stroke-width:1;stroke-dasharray:3 3;opacity:0}
+.ch .dt{fill:var(--card);stroke:var(--ink);stroke-width:2;opacity:0}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);padding:7px 11px;border-radius:10px;font-size:12px;opacity:0;transition:opacity .12s;white-space:nowrap;transform:translate(-50%,-115%);line-height:1.5;z-index:5}
+.lg{display:flex;gap:14px;font-size:11px;letter-spacing:.06em;text-transform:none;font-weight:500}
+.lg span::before{content:"";display:inline-block;width:14px;height:2px;background:var(--ink);vertical-align:middle;margin-right:6px}
+.lg span.s2::before{background:var(--mut)}
+.hb{display:grid;grid-template-columns:1fr auto;gap:5px 10px;margin-bottom:14px;font-size:13px}
+.hb span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb span:last-child{color:var(--mut);font-variant-numeric:tabular-nums}
+.hb .bar{grid-column:1/-1;height:6px;border-radius:9px;background:var(--acc2);overflow:hidden}
+.hb .bar i{display:block;height:100%;background:var(--ink);border-radius:9px;transform-origin:left;animation:grow .9s both}
+.bars{display:flex;gap:8px;height:170px}
+.bc{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:11px;color:var(--mut)}
+.bw{flex:1;width:100%;display:flex;align-items:end}
+.bb{width:100%;border-radius:8px 8px 3px 3px;background:var(--acc2);min-height:3px;transform-origin:bottom;animation:growy .8s both}
+.bb.max{background:var(--ink)}
+.ins{display:flex;flex-direction:column;gap:12px}
+.ins div{display:flex;gap:11px;font-size:14px;line-height:1.5}
+.ins div::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--ink);margin-top:8px}
+.chip{display:inline-block;padding:2px 9px;border-radius:99px;background:var(--acc2);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.chip.r{background:rgba(214,69,69,.12);color:#d64545}
+.sw{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sw:last-child{border:none}
+table.mini{min-width:540px}
+table.mini td{padding:9px 6px}
+.note{font-size:12px;color:var(--mut);margin-top:10px}
+.setup ol{margin:14px 0 18px;padding-left:20px;line-height:1.9;color:var(--ink)}
+.setup ol span{color:var(--mut)}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:800px){.sg{grid-template-columns:1fr}}
+.sg .pnl input{border:1px solid var(--line);margin-bottom:10px}
+.sg .pnl .lbl{margin-top:4px}
+@media print{header,.wrap,.nav{opacity:1!important;transform:none!important}}
+@media print{#intro,header button,header .pill,.nav,.side,.row,.x,#vd,#vs{display:none!important}.wrap,#vr{display:block!important}}
 </style>
 </head>
-<body>
+<body data-role="manager" data-view="dash">
 <div class="mod" id="auth" style="z-index:60;background:var(--bg)"><div class="box"><h1 style="margin-bottom:4px">Stock<b>room</b></h1><div class="sub" style="margin-bottom:14px">Please sign in to access your records.</div><div class="row" style="margin:0 0 12px"><button id="tin" class="p">Sign In</button><button id="tup">Create Account</button></div><input id="au" placeholder="Username" autocomplete="username"><input id="ap" type="password" placeholder="Password (minimum 6 characters)" autocomplete="current-password"><input id="apu" placeholder="Purpose of account (e.g. Mart supply records)" style="display:none"><div id="aerr" class="sub" style="color:#c0392b;min-height:18px"></div><button class="p" id="ago" style="width:100%;margin-top:6px">Sign In</button></div></div>
 <div id="intro">
   <div class="aur"></div><div class="grid"></div><div class="spot" id="spot"></div><div class="grain"></div>
@@ -122,21 +204,25 @@ body.go header,body.go .wrap{opacity:1;transform:none}
 
 <header>
   <div><h1><svg class="hm" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><path d="M50 8L88 28V72L50 92L12 72V28Z"/><path d="M12 28L50 48L88 28M50 48V92"/></svg>Stock<b>room</b></h1><div class="sub">Product Inventory and Sales Management System</div><div class="sub" id="who" style="color:var(--acc);font-weight:600"></div></div>
-  <div class="row" style="margin:0">
-    <button id="exp">Export Backup</button>
-    <button id="imp">Import Backup</button>
+  <div class="row" style="margin:0;align-items:center">
+    <span class="pill"><i></i><span id="rl">Manager</span></span>
+    <button id="rsw">Switch to Admin</button>
     <button id="prt">Print Record</button><button id="out">Log Out</button>
-    <input type="file" id="file" accept=".json" hidden>
   </div>
 </header>
+<div class="nav"><button id="ndash" class="on">Dashboard</button><button id="nrec">Records</button><button id="nset">Settings</button></div>
 
-<div class="wrap">
+<div class="wrap one" id="vd"></div>
+
+<div class="wrap" id="vr" style="display:none">
   <aside class="card side">
-    <div class="lbl" style="margin-top:0">Record Date</div><input type="date" id="nd"><button class="p" id="new" style="width:100%;margin-top:8px">Create New Record</button>
+    <div class="lbl" style="margin-top:0">Record Date</div><div id="ndw"></div><button class="p" id="new" style="width:100%;margin-top:10px">Create New Record</button>
     <div class="dates" id="dates"></div>
   </aside>
   <main class="card" id="main"></main>
 </div>
+
+<div class="wrap one" id="vs" style="display:none"></div>
 <div id="toast"></div>
 
 <script>
@@ -169,15 +255,18 @@ const firebaseConfig={
   appId:"1:320105840143:web:a8842f725d2b2c0e396d7a",
   measurementId:"G-BH6ZY4XB1W"
 };
-const SEED=[["0000020140076","Mousse Cup Choco",250],["0000205823022","Cream Cheese Cup (Red Velvet)",250],["000000513036","Three Milk Cake (Chocolate)",190],["0000000510042","Three Milk Cake (Butterscotch)",190],["0000000335058","Brownie (Choco Fudge)",180],["0000000537087","Three Milk Cake (Lotus)",300]];
+const DEFAULT_CODE='pakistan2026';
 let db={records:{}},cur=null;
-if(!db.records)db.records={};
 const $=id=>document.getElementById(id);
 const num=v=>parseFloat(v)||0;
 const fmt=n=>n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+const fm0=n=>Math.round(n).toLocaleString();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const app=initializeApp(firebaseConfig),auth=getAuth(app),fs=getFirestore(app);
 let uid=null,unsub=null,remote={},dirty=false,tm=null,mode='in';
-const ser=r=>JSON.stringify({sr:r.sr||'',rows:r.rows.map(x=>[x.code,x.desc,x.price,x.sold,x.inn,x.exp,x.pre])});
+let view='dash',role='manager',range='30',S={hash:null,low:5,biz:''},ndv='',CH=null;
+const nr=x=>({code:x.code??'',desc:x.desc??'',price:x.price??'',cost:x.cost??'',sold:x.sold??'',inn:x.inn??'',exp:x.exp??'',pre:x.pre??''});
+const ser=r=>JSON.stringify({sr:r.sr||'',rows:r.rows.map(x=>[x.code,x.desc,x.price,x.cost,x.sold,x.inn,x.exp,x.pre])});
 function save(){dirty=true;clearTimeout(tm);tm=setTimeout(flush,600)}
 async function flush(){
  if(!uid)return;
@@ -187,12 +276,65 @@ async function flush(){
  }catch(e){toast('Unable to synchronise. Please check your connection.')}
  dirty=false;
 }
-function toast(m){const t=$('toast');t.textContent=m;t.className='s';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',1800)}
-const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+function toast(m){const t=$('toast');t.textContent=m;t.className='s';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',2200)}
+/* ---------- dates ---------- */
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MS=MONTHS.map(m=>m.slice(0,3));
+const pad=n=>String(n).padStart(2,'0');
+const dim=(y,m)=>new Date(y,m,0).getDate();
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>ymd(new Date());
+const addDays=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return ymd(d)};
+const fd=d=>(+d.slice(8))+' '+MS[+d.slice(5,7)-1]+' '+d.slice(0,4);
+const sd=d=>(+d.slice(8))+' '+MS[+d.slice(5,7)-1];
+const wd=d=>new Date(d+'T00:00:00').toLocaleDateString('en-GB',{weekday:'long'});
+function dsHTML(v){
+ const [y,m,d]=v.split('-').map(Number),cy=new Date().getFullYear(),ys=[];
+ for(let i=cy-5;i<=cy+3;i++)ys.push(i);
+ if(!ys.includes(y)){ys.push(y);ys.sort((a,b)=>a-b)}
+ const o=(a,sel)=>a.map(([val,t])=>`<option value="${val}"${val===sel?' selected':''}>${t}</option>`).join('');
+ return `<div class="ds"><div><span class="dl2">Day</span><select data-p="d">${o(Array.from({length:dim(y,m)},(_,i)=>[i+1,i+1]),d)}</select></div><div><span class="dl2">Month</span><select data-p="m">${o(MONTHS.map((t,i)=>[i+1,t]),m)}</select></div><div><span class="dl2">Year</span><select data-p="y">${o(ys.map(t=>[t,t]),y)}</select></div></div>`;
+}
+function mountDs(el,v,cb){
+ el.innerHTML=dsHTML(v);
+ el.querySelectorAll('select').forEach(s=>s.onchange=()=>{
+  const g=p=>+el.querySelector('[data-p='+p+']').value;
+  const y=g('y'),m=g('m'),d=Math.min(g('d'),dim(y,m));
+  const n=y+'-'+pad(m)+'-'+pad(d);mountDs(el,n,cb);cb(n)});
+}
 const sorted=()=>Object.keys(db.records).sort().reverse();
-
-
-function closing(r){return r.rows.map(x=>({code:x.code,v:num(x.pre)+num(x.inn)-num(x.sold)-num(x.exp)}))}
+/* ---------- metrics ---------- */
+const hasCost=x=>x.cost!==''&&x.cost!=null&&!isNaN(parseFloat(x.cost));
+function rowM(x){
+ const p=num(x.price),c=num(x.cost),s=num(x.sold),hc=hasCost(x);
+ return {p,c,hc,sales:p*s,cogs:hc?c*s:0,units:s,inn:num(x.inn),exp:num(x.exp),expLoss:hc?c*num(x.exp):0,inCost:hc?c*num(x.inn):0,close:num(x.pre)+num(x.inn)-num(x.sold)-num(x.exp)};
+}
+function closing(r){return r.rows.map(x=>({code:x.code,v:rowM(x).close}))}
+function agg(date,rec){
+ const o={date,sales:0,units:0,profit:0,cs:0,expLoss:0,expU:0,inn:0,close:0,unc:0,stockVal:0,items:[]};
+ rec.rows.forEach(x=>{
+  const m=rowM(x);o.sales+=m.sales;o.units+=m.units;o.inn+=m.inn;o.expU+=m.exp;o.close+=m.close;
+  if(m.hc){o.profit+=m.sales-m.cogs;o.cs+=m.sales;o.expLoss+=m.expLoss;o.stockVal+=Math.max(0,m.close)*m.c}else if(m.sales>0)o.unc+=m.sales;
+  o.items.push(Object.assign({k:x.code||x.desc||'?',name:x.desc||x.code||'Unnamed'},m));
+ });
+ return o;
+}
+function tot(l){
+ const t={sales:0,units:0,profit:0,cs:0,expLoss:0,expU:0,unc:0,n:l.length};
+ l.forEach(d=>{t.sales+=d.sales;t.units+=d.units;t.profit+=d.profit;t.cs+=d.cs;t.expLoss+=d.expLoss;t.expU+=d.expU;t.unc+=d.unc});
+ return t;
+}
+function prodMap(l){
+ const m=new Map();
+ l.forEach(d=>d.items.forEach(i=>{
+  let p=m.get(i.k);if(!p){p={name:i.name,sales:0,units:0,profit:0,cs:0,exp:0,expLoss:0,anyNoCost:false};m.set(i.k,p)}
+  p.sales+=i.sales;p.units+=i.units;p.exp+=i.exp;
+  if(i.hc){p.profit+=i.sales-i.cogs;p.cs+=i.sales;p.expLoss+=i.expLoss}else p.anyNoCost=true;
+ }));
+ return m;
+}
+const pctChg=(a,b)=>b>0?(a-b)/b*100:null;
+/* ---------- records ---------- */
 function newRecord(date){
   if(!date)return;
   if(db.records[date]){cur=date;render();toast('A record for this date already exists and has been opened');return}
@@ -200,53 +342,57 @@ function newRecord(date){
   const prev=prevKey&&db.records[prevKey];
   let rows,sr;
   if(prev){const cl=Object.fromEntries(closing(prev).map(c=>[c.code,c.v]));
-    rows=prev.rows.map(x=>({code:x.code,desc:x.desc,price:x.price,sold:'',inn:'',exp:'',pre:Math.max(0,cl[x.code]||0)||''}));
+    rows=prev.rows.map(x=>({code:x.code,desc:x.desc,price:x.price,cost:x.cost,sold:'',inn:'',exp:'',pre:Math.max(0,cl[x.code]||0)||''}));
     sr=String(num(prev.sr)+1)}
-  else{rows=SEED.map(s=>({code:s[0],desc:s[1],price:s[2],sold:'',inn:'',exp:'',pre:''}));sr='1'}
-  db.records[date]={sr,rows};cur=date;save();render();toast('Record created successfully')
+  else{rows=[];sr='1'}
+  db.records[date]={sr,rows};cur=date;save();render();toast(prev?'Record created successfully':'First record created. Tap Add Product to begin.')
 }
 function renderList(){
   const k=sorted();
-  $('dates').innerHTML=k.length?k.map(d=>`<div class="d ${d===cur?'on':''}" data-d="${d}"><span>${d}<br><small>${new Date(d+'T00:00').toLocaleDateString(undefined,{weekday:'long'})}</small></span><small>SR ${db.records[d].sr||'-'}</small></div>`).join(''):'<div class="empty" style="padding:20px 4px">No records available.</div>';
+  $('dates').innerHTML=k.length?k.map(d=>`<div class="d ${d===cur?'on':''}" data-d="${d}"><span>${fd(d)}<br><small>${wd(d)}</small></span><small>SR ${db.records[d].sr||'-'}</small></div>`).join(''):'<div class="empty" style="padding:20px 4px">No records available.</div>';
   $('dates').querySelectorAll('.d').forEach(e=>e.onclick=()=>{cur=e.dataset.d;render()})
 }
 function render(){
   renderList();
-  const m=$('main');
+  const m=$('main'),adm=role==='admin';
   if(!cur||!db.records[cur]){m.innerHTML='<div class="empty">Please select a date or create a new record to proceed.</div>';return}
   const r=db.records[cur];
-  const f=(i,k,cls='')=>`<input class="${cls}" data-i="${i}" data-k="${k}" value="${String(r.rows[i][k]).replace(/"/g,'&quot;')}" ${['price','sold','inn','exp','pre'].includes(k)?'inputmode="decimal"':''}>`;
+  const f=(i,k,cls='')=>{const miss=k==='cost'&&String(r.rows[i].cost)==='';return `<input class="${cls}${miss?' miss':''}" data-i="${i}" data-k="${k}" value="${esc(r.rows[i][k])}" ${k==='cost'?'placeholder="required"':''} ${['price','cost','sold','inn','exp','pre'].includes(k)?'inputmode="decimal"':''}>`};
+  const missing=r.rows.filter(x=>!hasCost(x)).length;
+  const cols=adm?12:10;
   m.innerHTML=`<div class="meta">
-    <div><label>Date</label><input type="date" id="fd" value="${cur}"></div>
-    <div><label>SR#</label><input id="fsr" value="${r.sr||''}"></div>
+    <div><label>Date</label><div id="fdw"></div></div>
+    <div><label>SR#</label><input id="fsr" value="${esc(r.sr||'')}"></div>
     <div style="margin-left:auto"><button id="del">Delete Record</button></div></div>
-  <div class="tw"><table><thead><tr><th>Sr#</th><th>Item Code</th><th>Description</th><th class="num">Price (PKR)</th><th class="num">Sold</th><th class="num">Total (PKR)</th><th class="num">Stock-In</th><th class="num">Expire</th><th class="num">Pre-stock</th><th></th></tr></thead><tbody>
-  ${r.rows.map((x,i)=>`<tr><td class="n">${i+1}</td><td>${f(i,'code')}</td><td>${f(i,'desc')}</td><td>${f(i,'price','num')}</td><td>${f(i,'sold','num')}</td><td class="t num" id="t${i}">${fmt(num(x.price)*num(x.sold))}</td><td>${f(i,'inn','num')}</td><td>${f(i,'exp','num')}</td><td>${f(i,'pre','num')}</td><td><button class="x" data-rm="${i}" title="Remove">✕</button></td></tr>`).join('')}
+  <div class="sub" style="margin:-4px 0 14px" id="fdl">${wd(cur)}, ${fd(cur)}</div>
+  ${adm&&missing?`<div class="warn">${missing} product${missing>1?'s have':' has'} no cost price yet. Fill the red Cost fields so profit is calculated correctly.</div>`:''}
+  <div class="tw"><table><thead><tr><th>Sr#</th><th>Item Code</th><th>Description</th><th class="num">Price (PKR)</th>${adm?'<th class="num">Cost (PKR)</th>':''}<th class="num">Sold</th><th class="num">Total (PKR)</th>${adm?'<th class="num">Profit (PKR)</th>':''}<th class="num">Stock-In</th><th class="num">Expire</th><th class="num">Pre-stock</th><th></th></tr></thead><tbody>
+  ${r.rows.length?r.rows.map((x,i)=>`<tr><td class="n">${i+1}</td><td>${f(i,'code')}</td><td>${f(i,'desc')}</td><td>${f(i,'price','num')}</td>${adm?`<td>${f(i,'cost','num')}</td>`:''}<td>${f(i,'sold','num')}</td><td class="t num" id="t${i}">${fmt(num(x.price)*num(x.sold))}</td>${adm?`<td class="t num" id="p${i}">${hasCost(x)?fmt((num(x.price)-num(x.cost))*num(x.sold)):'—'}</td>`:''}<td>${f(i,'inn','num')}</td><td>${f(i,'exp','num')}</td><td>${f(i,'pre','num')}</td><td><button class="x" data-rm="${i}" title="Remove">✕</button></td></tr>`).join(''):`<tr><td colspan="${cols}"><div class="empty">No products in this record yet. Tap “Add Product” to begin.</div></td></tr>`}
   </tbody></table></div>
   <div class="row"><button id="add">Add Product</button></div>
   <div class="sum" id="sum"></div>`;
   sum();
+  mountDs($('fdw'),cur,n=>{
+    if(!n||n===cur)return;
+    if(db.records[n]){toast('A record already exists for the selected date');mountDs($('fdw'),cur,()=>{});return}
+    db.records[n]=r;delete db.records[cur];cur=n;save();render()});
   m.querySelectorAll('input[data-k]').forEach(e=>e.oninput=()=>{
-    const i=+e.dataset.i;r.rows[i][e.dataset.k]=e.value;save();
-    $('t'+i).textContent=fmt(num(r.rows[i].price)*num(r.rows[i].sold));sum()});
+    const i=+e.dataset.i,k=e.dataset.k;r.rows[i][k]=e.value;save();
+    $('t'+i).textContent=fmt(num(r.rows[i].price)*num(r.rows[i].sold));
+    const pe=$('p'+i);if(pe)pe.textContent=hasCost(r.rows[i])?fmt((num(r.rows[i].price)-num(r.rows[i].cost))*num(r.rows[i].sold)):'—';
+    if(k==='cost')e.classList.toggle('miss',e.value==='');
+    sum()});
   m.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ask('Are you sure you wish to remove this product from this record?',()=>{r.rows.splice(+b.dataset.rm,1);save();render()})});
-  $('add').onclick=()=>{r.rows.push({code:'',desc:'',price:'',sold:'',inn:'',exp:'',pre:''});save();render()};
+  $('add').onclick=()=>{r.rows.push({code:'',desc:'',price:'',cost:'',sold:'',inn:'',exp:'',pre:''});save();render()};
   $('fsr').oninput=e=>{r.sr=e.target.value;save();renderList()};
-  $('fd').onchange=e=>{const n=e.target.value;if(!n||n===cur)return;if(db.records[n]){toast('A record already exists for the selected date');e.target.value=cur;return}
-    db.records[n]=r;delete db.records[cur];cur=n;save();render()};
-  $('del').onclick=()=>{ask('Are you sure you wish to delete the record dated '+cur+'?',()=>{delete db.records[cur];cur=sorted()[0]||null;save();render()})}
+  $('del').onclick=()=>{ask('Are you sure you wish to delete the record dated '+fd(cur)+'?',()=>{delete db.records[cur];cur=sorted()[0]||null;save();render()})}
 }
 function sum(){
   const r=db.records[cur];if(!r)return;
-  let sold=0,amt=0,inn=0,exp=0,bal=0;
-  r.rows.forEach(x=>{sold+=num(x.sold);amt+=num(x.price)*num(x.sold);inn+=num(x.inn);exp+=num(x.exp);bal+=num(x.pre)+num(x.inn)-num(x.sold)-num(x.exp)});
-  $('sum').innerHTML=`<div><small>Total Units Sold</small><b>${sold}</b></div><div><small>Total Sales</small><b>PKR ${fmt(amt)}</b></div><div><small>Total Stock-In</small><b>${inn}</b></div><div><small>Total Expired</small><b>${exp}</b></div><div><small>Closing Stock</small><b>${bal}</b></div>`
+  const a=agg(cur,r),adm=role==='admin';
+  $('sum').innerHTML=`<div><small>Total Units Sold</small><b>${a.units}</b></div><div><small>Total Sales</small><b>PKR ${fmt(a.sales)}</b></div>${adm?`<div><small>Gross Profit</small><b>PKR ${fmt(a.profit)}</b></div><div><small>Expired Loss</small><b>PKR ${fmt(a.expLoss)}</b></div>`:''}<div><small>Total Stock-In</small><b>${a.inn}</b></div><div><small>Total Expired</small><b>${a.expU}</b></div><div><small>Closing Stock</small><b>${a.close}</b></div>`
 }
-$('new').onclick=()=>{const d=prompt('Date for the new record (YYYY-MM-DD):',today());if(d&&/^\d{4}-\d{2}-\d{2}$/.test(d.trim()))newRecord(d.trim());else if(d)toast('Use format YYYY-MM-DD')};
-$('prt').onclick=()=>window.print();
-$('exp').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,1)],{type:'application/json'}));a.download='stockroom-backup-'+today()+'.json';a.click()};
-$('imp').onclick=()=>$('file').click();
-$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const d=JSON.parse(rd.result);if(!d.records)throw 0;if(confirm('Replace current data with this backup?')){db=d;cur=sorted()[0]||null;save();render();toast('Backup restored')}}catch(x){toast('Invalid backup file')}};rd.readAsText(f);e.target.value=''};
+/* ---------- modal helpers ---------- */
 function modal(msg,o={}){
  const m=document.createElement('div');m.className='mod';
  m.innerHTML='<div class="box"><p>'+msg+'</p>'+(o.ta!==undefined?'<textarea></textarea>':'')+'<div class="row"><button class="p ok">'+(o.ok||'OK')+'</button>'+(o.cancel===false?'':'<button class="no">Cancel</button>')+'</div></div>';
@@ -256,10 +402,214 @@ function modal(msg,o={}){
  document.body.appendChild(m);if(t){t.focus();if(o.ta)t.select()}
 }
 function ask(msg,cb){modal(msg,{ok:'Yes',cb})}
-$('nd').value=today();
-$('new').onclick=()=>{const d=$('nd').value||today();newRecord(d)};
-$('exp').onclick=()=>modal('Please copy the backup text below and store it in a safe location:',{ta:JSON.stringify(db),ok:'Copy',cancel:false,cb:v=>{try{navigator.clipboard.writeText(v)}catch(e){}toast('Backup copied to clipboard')}});
-$('imp').onclick=()=>modal('Please paste the backup text to restore. Existing data will be replaced:',{ta:'',ok:'Restore',cb:v=>{try{const d=JSON.parse(v);if(!d.records)throw 0;db=d;cur=sorted()[0]||null;save();render();toast('Backup restored successfully')}catch(x){toast('The backup text provided is invalid')}}});
+/* ---------- admin code ---------- */
+async function H(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('stockroom:'+s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return 'p:'+btoa(unescape(encodeURIComponent(s)))}}
+async function codeOk(c){return (await H(c))===(S.hash||await H(DEFAULT_CODE))}
+function unlock(cb){
+ const m=document.createElement('div');m.className='mod';
+ m.innerHTML='<div class="box"><p style="font-weight:600;margin-bottom:4px">Admin access</p><div class="sub" style="margin-bottom:12px">Enter the admin code to continue.</div><input type="password" id="ac" placeholder="Admin code" autocomplete="off"><div class="sub" id="ae" style="color:#c0392b;min-height:18px"></div><div class="row"><button class="p ok">Unlock</button><button class="no">Cancel</button></div></div>';
+ document.body.appendChild(m);
+ const i=m.querySelector('#ac'),e=m.querySelector('#ae');i.focus();
+ const go=async()=>{if(await codeOk(i.value)){m.remove();setRole('admin');if(cb)cb()}else{e.textContent='Incorrect code. Please try again.';i.value='';i.focus()}};
+ m.querySelector('.ok').onclick=go;m.querySelector('.no').onclick=()=>m.remove();
+ i.onkeydown=ev=>{if(ev.key==='Enter')go()};
+}
+function setRole(r){
+ role=r;document.body.dataset.role=r;
+ $('rl').textContent=r==='admin'?'Admin':'Manager';
+ $('rsw').textContent=r==='admin'?'Switch to Manager':'Switch to Admin';
+ if(view==='set'&&r!=='admin')view='dash';
+ setView(view);
+ toast(r==='admin'?'Admin mode unlocked':'Switched to Manager');
+}
+function setView(v){
+ view=v;document.body.dataset.view=v;
+ $('vd').style.display=v==='dash'?'':'none';
+ $('vr').style.display=v==='rec'?'':'none';
+ $('vs').style.display=v==='set'?'':'none';
+ $('ndash').className=v==='dash'?'on':'';$('nrec').className=v==='rec'?'on':'';$('nset').className=v==='set'?'on':'';
+ $('prt').style.display=v==='rec'?'':'none';
+ if(v==='dash')dash();else if(v==='rec')render();else renderSet();
+}
+$('ndash').onclick=()=>setView('dash');
+$('nrec').onclick=()=>setView('rec');
+$('nset').onclick=()=>{if(role==='admin')setView('set');else unlock(()=>setView('set'))};
+$('rsw').onclick=()=>{if(role==='admin')setRole('manager');else unlock()};
+$('prt').onclick=()=>window.print();
+/* ---------- charts ---------- */
+function niceStep(raw){if(raw<=0)return 1;const e=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e}
+const kfmt=v=>Math.abs(v)>=1000?(Math.round(v/100)/10)+'k':String(Math.round(v));
+function lineChart(labels,series){
+ const W=640,H=230,pl=44,pr=14,pt=14,pb=28,n=labels.length;
+ const all=series.flatMap(s=>s.v);let mx=Math.max(...all,1),mn=Math.min(...all,0);
+ const step=niceStep((mx-mn)/4);mx=Math.ceil(mx/step)*step;mn=Math.floor(mn/step)*step;if(mx===mn)mx=mn+step;
+ const X=i=>n===1?pl+(W-pl-pr)/2:pl+i*(W-pl-pr)/(n-1);
+ const Y=v=>pt+(1-(v-mn)/(mx-mn))*(H-pt-pb);
+ let g='';for(let v=mn;v<=mx+step/1e6;v+=step)g+=`<line class="gl" x1="${pl}" x2="${W-pr}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${pl-8}" y="${Y(v)+3}" text-anchor="end">${kfmt(v)}</text>`;
+ const idx=[...new Set([0,Math.floor((n-1)/2),n-1])];
+ const xl=idx.map((i,k)=>`<text x="${X(i)}" y="${H-8}" text-anchor="${i===0&&n>1?'start':i===n-1&&n>1?'end':'middle'}">${labels[i].short}</text>`).join('');
+ let paths='';
+ series.forEach((s,k)=>{
+  const pts=s.v.map((v,i)=>[X(i),Y(v)]);
+  const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  if(k===0&&n>1)paths+=`<path d="${d} L${X(n-1)} ${Y(Math.max(mn,0))} L${X(0)} ${Y(Math.max(mn,0))} Z" fill="url(#ga)"/>`;
+  paths+=n>1?`<path class="${k?'l2':'l1'}" d="${d}"/>`:'';
+  if(n===1)paths+=`<circle cx="${pts[0][0]}" cy="${pts[0][1]}" r="4" fill="${k?'var(--mut)':'var(--ink)'}"/>`;
+ });
+ CH={W,H,pl,pr,n,labels,series,X,Y};
+ return `<div class="cw" id="cw"><svg class="ch" id="chs" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ink);stop-opacity:.16"/><stop offset="1" style="stop-color:var(--ink);stop-opacity:0"/></linearGradient></defs>${g}${xl}${paths}<line class="cx" id="cx" x1="0" x2="0" y1="${pt}" y2="${H-pb}"/>${series.map((s,k)=>`<circle class="dt" id="dt${k}" r="4.5"/>`).join('')}</svg><div class="tip" id="tip"></div></div>`;
+}
+function bindChart(){
+ const s=$('chs');if(!s||!CH)return;
+ const C=CH,tip=$('tip'),cx=$('cx');
+ const move=e=>{
+  const r=s.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*C.W;
+  let i=C.n===1?0:Math.round((px-C.pl)/(C.W-C.pl-C.pr)*(C.n-1));i=Math.max(0,Math.min(C.n-1,i));
+  const x=C.X(i);cx.setAttribute('x1',x);cx.setAttribute('x2',x);cx.style.opacity=1;
+  C.series.forEach((se,k)=>{const d=$('dt'+k);d.setAttribute('cx',x);d.setAttribute('cy',C.Y(se.v[i]));d.style.opacity=1});
+  tip.innerHTML='<b>'+C.labels[i].full+'</b><br>'+C.series.map(se=>se.name+': PKR '+fm0(se.v[i])).join('<br>');
+  tip.style.left=(x/C.W*r.width)+'px';tip.style.top=(C.Y(C.series[0].v[i])/C.H*r.height)+'px';tip.style.opacity=1;
+ };
+ const leave=()=>{tip.style.opacity=0;cx.style.opacity=0;C.series.forEach((se,k)=>$('dt'+k).style.opacity=0)};
+ s.addEventListener('pointermove',move);s.addEventListener('pointerdown',move);s.addEventListener('pointerleave',leave);
+}
+function countUp(root){
+ root.querySelectorAll('[data-n]').forEach(el=>{
+  const n=parseFloat(el.dataset.n)||0,p=el.dataset.p||'',sf=el.dataset.s||'',dec=+el.dataset.d||0,t0=performance.now(),D=900;
+  const show=v=>{el.textContent=p+v.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec})+sf};
+  (function f(t){const k=Math.min(1,(t-t0)/D);show(n*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f);else show(n)})(t0);
+ });
+}
+/* ---------- dashboard ---------- */
+function dchip(p){
+ if(range==='all')return '<i class="dl">All time</i>';
+ if(p===null)return '<i class="dl">No prior data</i>';
+ const up=p>=0.05,dn=p<=-0.05;
+ return `<i class="dl ${up?'up':dn?'dn':''}">${up?'▲':dn?'▼':'●'} ${Math.abs(p).toFixed(1)}% vs previous</i>`;
+}
+const kp=(l,n,o={})=>`<div class="kpi${o.hero?' hero':''}" style="animation-delay:${(o.i||0)*60}ms"><small>${l}</small><b data-n="${n}" data-p="${o.p||''}" data-s="${o.s||''}" data-d="${o.d||0}">0</b>${o.sub!==undefined?`<i class="dl">${o.sub}</i>`:dchip(o.dv)}</div>`;
+function dash(){
+ const el=$('vd'),ks=Object.keys(db.records).sort(),adm=role==='admin';
+ if(!ks.length){
+  el.innerHTML=`<div class="dash"><div class="dh"><div><h2>Welcome${S.biz?', '+esc(S.biz):''}</h2><div class="sub">Your workspace is empty. Let's set it up.</div></div></div><div class="pnl setup"><h3>Getting started</h3><ol><li>Open <b>Records</b> and create your first record for any date.</li><li>Tap <b>Add Product</b> and enter every item: code, name and selling price.</li><li>Switch to <b>Admin</b> and enter the cost price of every item. <span>Profit cannot be calculated without it.</span></li><li>Fill in sold, stock-in, expired and pre-stock. This dashboard builds itself.</li></ol><button class="p" id="go1">Go to Records</button></div></div>`;
+  $('go1').onclick=()=>setView('rec');return;
+ }
+ const days=ks.map(k=>agg(k,db.records[k])),endD=ks[ks.length-1];
+ let list=days,prev=[];
+ if(range!=='all'){const n=+range,st=addDays(endD,-(n-1)),ps=addDays(endD,-(2*n-1));list=days.filter(d=>d.date>=st);prev=days.filter(d=>d.date>=ps&&d.date<st)}
+ const t=tot(list),pt=tot(prev),latest=days[days.length-1];
+ const net=t.profit-t.expLoss,pnet=pt.profit-pt.expLoss;
+ const margin=t.cs>0?t.profit/t.cs*100:0;
+ const avg=t.n?t.sales/t.n:0;
+ const stockUnits=latest.close;
+ let kpis='';
+ if(adm){
+  kpis=kp('Total Sales',t.sales,{hero:1,p:'PKR ',dv:pctChg(t.sales,pt.sales),i:0})
+   +kp('Gross Profit',t.profit,{p:'PKR ',dv:pctChg(t.profit,pt.profit),i:1})
+   +kp('Net Profit',net,{p:'PKR ',sub:'after expired stock',i:2})
+   +kp('Margin',margin,{s:'%',d:1,sub:'on costed sales',i:3})
+   +kp('Units Sold',t.units,{dv:pctChg(t.units,pt.units),i:4})
+   +kp('Avg per Record',avg,{p:'PKR ',sub:t.n+' record'+(t.n>1?'s':''),i:5})
+   +kp('Expired Loss',t.expLoss,{p:'PKR ',sub:t.expU+' units expired',i:6})
+   +kp('Stock Value',latest.stockVal,{p:'PKR ',sub:stockUnits+' units at cost',i:7});
+ }else{
+  kpis=kp('Total Sales',t.sales,{hero:1,p:'PKR ',dv:pctChg(t.sales,pt.sales),i:0})
+   +kp('Units Sold',t.units,{dv:pctChg(t.units,pt.units),i:1})
+   +kp('Avg per Record',avg,{p:'PKR ',sub:t.n+' record'+(t.n>1?'s':''),i:2})
+   +kp('Expired Units',t.expU,{sub:'in this period',i:3})
+   +kp('Closing Stock',stockUnits,{sub:'units, latest record',i:4})
+   +`<div class="kpi lock" id="unl" style="animation-delay:300ms"><small>Profit &amp; Cost</small><b>Admin only</b><i class="dl">Tap to unlock</i></div>`;
+ }
+ /* trend */
+ const labels=list.map(d=>({short:sd(d.date),full:wd(d.date).slice(0,3)+', '+fd(d.date)}));
+ const series=[{name:'Sales',v:list.map(d=>d.sales)}];
+ const showProfit=adm&&list.some(d=>d.cs>0);
+ if(showProfit)series.push({name:'Profit',v:list.map(d=>d.profit)});
+ /* products */
+ const pm=prodMap(list),pp=prodMap(prev);
+ const prods=[...pm.entries()].map(([k,p])=>Object.assign({k},p));
+ const top=prods.filter(p=>p.sales>0).sort((a,b)=>b.sales-a.sales).slice(0,6);
+ const topMax=top.length?top[0].sales:1;
+ /* weekday */
+ const dow=[0,0,0,0,0,0,0],dc=[0,0,0,0,0,0,0];
+ list.forEach(d=>{const i=(new Date(d.date+'T00:00:00').getDay()+6)%7;dow[i]+=d.sales;dc[i]++});
+ const dav=dow.map((v,i)=>dc[i]?v/dc[i]:0),dmax=Math.max(...dav,1),dbest=dav.indexOf(Math.max(...dav));
+ const DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],DF=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+ /* insights */
+ const ins=[];
+ if(t.sales>0){const b=list.reduce((a,d)=>d.sales>a.sales?d:a,list[0]);ins.push(`Best day: <b>${fd(b.date)}</b> (${wd(b.date)}) with <b>PKR ${fm0(b.sales)}</b> in sales.`)}
+ if(days.length>1){const a=days[days.length-1],b=days[days.length-2],c=pctChg(a.sales,b.sales);
+  if(c!==null)ins.push(`Latest record (${fd(a.date)}) sales were <b>${Math.abs(c).toFixed(1)}% ${c>=0?'higher':'lower'}</b> than the record before it.`)}
+ if(top.length&&t.sales>0)ins.push(`<b>${esc(top[0].name)}</b> is your top seller, bringing in ${(top[0].sales/t.sales*100).toFixed(0)}% of sales.`);
+ if(prev.length){
+  let up=null,dn=null;
+  pm.forEach((p,k)=>{const q=pp.get(k),pu=q?q.units:0,df=p.units-pu;if(df>0&&(!up||df>up.df))up={p,pu,df};if(df<0&&(!dn||df<dn.df))dn={p,pu,df}});
+  if(up)ins.push(`Rising: <b>${esc(up.p.name)}</b> sold ${up.p.units} units, ${up.pu>0?'up from '+up.pu:'new this period'}.`);
+  if(dn)ins.push(`Falling: <b>${esc(dn.p.name)}</b> sold ${dn.p.units} units, down from ${dn.pu}.`);
+ }
+ if(list.some(d=>dc.length)&&t.sales>0&&list.length>6)ins.push(`<b>${DF[dbest]}</b> is your strongest weekday on average.`);
+ const ex=prods.filter(p=>p.exp>0).sort((a,b)=>b.exp-a.exp)[0];
+ if(ex)ins.push(`<b>${esc(ex.name)}</b> had the most expired stock: ${ex.exp} units${adm&&ex.expLoss>0?' (PKR '+fm0(ex.expLoss)+' lost)':''}.`);
+ const low=latest.items.filter(i=>(i.name!=='Unnamed')&&i.close<=S.low).sort((a,b)=>a.close-b.close);
+ if(low.length)ins.push(`<b>${low.length}</b> product${low.length>1?'s are':' is'} at or below the stock alert level of ${S.low}.`);
+ if(adm){const nc=latest.items.filter(i=>!i.hc).length;if(nc)ins.push(`<b>${nc}</b> product${nc>1?'s have':' has'} no cost price. Profit figures exclude ${nc>1?'them':'it'}.`)}
+ if(!ins.length)ins.push('Add more sales data and insights will appear here.');
+ /* admin table */
+ let adminTbl='';
+ if(adm){
+  const rows=prods.filter(p=>p.units>0||p.sales>0).sort((a,b)=>b.profit-a.profit);
+  adminTbl=`<div class="pnl"><h3>Profit by product</h3><div class="tw"><table class="mini"><thead><tr><th>Product</th><th class="num">Units</th><th class="num">Sales</th><th class="num">Profit</th><th class="num">Margin</th></tr></thead><tbody>${rows.length?rows.map(p=>`<tr><td>${esc(p.name)}</td><td class="num">${p.units}</td><td class="num">${fm0(p.sales)}</td><td class="num">${p.anyNoCost&&p.cs===0?'<span class="chip r">No cost</span>':fm0(p.profit)}</td><td class="num">${p.cs>0?(p.profit/p.cs*100).toFixed(1)+'%':'—'}</td></tr>`).join(''):'<tr><td colspan="5"><div class="empty" style="padding:20px">No sales in this period.</div></td></tr>'}</tbody></table></div>${t.unc>0?`<div class="note">PKR ${fm0(t.unc)} of sales has no cost entered and is excluded from profit.</div>`:''}</div>`;
+ }
+ const lowHtml=low.length?low.slice(0,8).map(i=>`<div class="sw"><span>${esc(i.name)}</span><span class="chip ${i.close<=0?'r':''}">${i.close<=0?'Sold out':i.close+' left'}</span></div>`).join(''):`<div class="empty" style="padding:24px 0">All products are above the alert level (${S.low}).</div>`;
+ const rl={'7':'Last 7 days','30':'Last 30 days','all':'All time'}[range];
+ el.innerHTML=`<div class="dash">
+  <div class="dh"><div><h2>Overview</h2><div class="sub">${S.biz?esc(S.biz)+' · ':''}${rl}, up to ${fd(endD)} · ${ks.length} record${ks.length>1?'s':''} in total</div></div>
+   <div class="chips" id="chips"><button data-r="7" class="${range==='7'?'on':''}">7 Days</button><button data-r="30" class="${range==='30'?'on':''}">30 Days</button><button data-r="all" class="${range==='all'?'on':''}">All Time</button></div></div>
+  <div class="kg">${kpis}</div>
+  <div class="g2">
+   <div class="pnl"><h3>Sales trend<span class="lg"><span>Sales</span>${showProfit?'<span class="s2">Profit</span>':''}</span></h3>${lineChart(labels,series)}</div>
+   <div class="pnl"><h3>Top products</h3>${top.length?top.map(p=>`<div class="hb"><span>${esc(p.name)}</span><span>PKR ${fm0(p.sales)}${adm&&p.cs>0?' · '+fm0(p.profit)+' profit':''}</span><div class="bar"><i style="width:${p.sales/topMax*100}%"></i></div></div>`).join(''):'<div class="empty" style="padding:30px 0">No sales in this period.</div>'}</div>
+  </div>
+  <div class="g3">
+   <div class="pnl"><h3>Average sales by weekday</h3><div class="bars">${dav.map((v,i)=>`<div class="bc" title="${DF[i]}: PKR ${fm0(v)}"><div class="bw"><div class="bb${i===dbest&&v>0?' max':''}" style="height:${v/dmax*100}%;animation-delay:${i*50}ms"></div></div>${DN[i]}</div>`).join('')}</div></div>
+   <div class="pnl"><h3>Stock watch</h3>${lowHtml}</div>
+  </div>
+  <div class="pnl"><h3>What is changing</h3><div class="ins">${ins.map(x=>`<div>${x}</div>`).join('')}</div></div>
+  ${adminTbl}
+ </div>`;
+ el.querySelectorAll('#chips button').forEach(b=>b.onclick=()=>{range=b.dataset.r;dash()});
+ const u=$('unl');if(u)u.onclick=()=>unlock();
+ bindChart();countUp(el);
+}
+/* ---------- settings ---------- */
+function renderSet(){
+ const el=$('vs');
+ if(role!=='admin'){el.innerHTML='<div class="pnl"><div class="empty">Settings are available in Admin mode.</div></div>';return}
+ el.innerHTML=`<div class="dash"><div class="dh"><div><h2>Settings</h2><div class="sub">Admin controls for this account</div></div></div>
+ <div class="sg">
+  <div class="pnl"><h3>Admin code</h3><div class="lbl">New code</div><input type="password" id="sc1" placeholder="At least 4 characters" autocomplete="new-password"><div class="lbl">Confirm new code</div><input type="password" id="sc2" placeholder="Repeat the code" autocomplete="new-password"><button class="p" id="scs">Change Admin Code</button><div class="note">The code is required each time you switch from Manager to Admin.</div></div>
+  <div class="pnl"><h3>Business</h3><div class="lbl">Business name</div><input id="sbz" value="${esc(S.biz||'')}" placeholder="Shown on the dashboard"><div class="lbl">Low stock alert level (units)</div><input id="slw" inputmode="numeric" value="${S.low}"><button class="p" id="sbs">Save</button></div>
+  <div class="pnl"><h3>Backup</h3><div class="note" style="margin:0 0 12px">Backups contain costs and prices. Store them somewhere safe.</div><div class="row" style="margin:0"><button id="exp">Export Backup</button><button id="imp">Import Backup</button></div></div>
+  <div class="pnl"><h3>Account</h3><div class="sub" style="margin:0 0 6px">${esc($('who').textContent||'')}</div><div class="note">Records: ${Object.keys(db.records).length}</div></div>
+ </div></div>`;
+ $('scs').onclick=async()=>{
+  const a=$('sc1').value,b=$('sc2').value;
+  if(a.length<4){toast('Code must be at least 4 characters');return}
+  if(a!==b){toast('The two codes do not match');return}
+  try{S.hash=await H(a);await setDoc(doc(fs,'users',uid),{adminHash:S.hash},{merge:true});$('sc1').value='';$('sc2').value='';toast('Admin code changed')}catch(e){toast('Could not save. Check your connection.')}
+ };
+ $('sbs').onclick=async()=>{
+  const low=Math.max(0,parseInt($('slw').value)||0),biz=$('sbz').value.trim();
+  try{await setDoc(doc(fs,'users',uid),{biz,lowStock:low},{merge:true});S.biz=biz;S.low=low;toast('Settings saved')}catch(e){toast('Could not save. Check your connection.')}
+ };
+ $('exp').onclick=()=>modal('Please copy the backup text below and store it in a safe location:',{ta:JSON.stringify(db),ok:'Copy',cancel:false,cb:v=>{try{navigator.clipboard.writeText(v)}catch(e){}toast('Backup copied to clipboard')}});
+ $('imp').onclick=()=>modal('Please paste the backup text to restore. Existing data will be replaced:',{ta:'',ok:'Restore',cb:v=>{try{const d=JSON.parse(v);if(!d.records)throw 0;Object.keys(d.records).forEach(k=>{d.records[k]={sr:d.records[k].sr||'',rows:(d.records[k].rows||[]).map(nr)}});db=d;cur=sorted()[0]||null;save();toast('Backup restored successfully')}catch(x){toast('The backup text provided is invalid')}}});
+}
+/* ---------- sidebar new record ---------- */
+ndv=today();
+mountDs($('ndw'),ndv,v=>{ndv=v});
+$('new').onclick=()=>newRecord(ndv);
+/* ---------- auth ---------- */
 const em=u=>u.toLowerCase()+'@stockroom.app';
 function setMode(m){mode=m;$('apu').style.display=m==='up'?'block':'none';$('ago').textContent=m==='up'?'Create Account':'Sign In';$('tin').className=m==='in'?'p':'';$('tup').className=m==='up'?'p':'';$('aerr').textContent=''}
 $('tin').onclick=()=>setMode('in');$('tup').onclick=()=>setMode('up');
@@ -269,25 +619,32 @@ $('ago').onclick=async()=>{
  if(p.length<6){e.textContent='Password must be at least 6 characters.';return}
  if(mode==='up'&&!pu){e.textContent='Please state the purpose of this account.';return}
  try{
-  if(mode==='up'){const c=await createUserWithEmailAndPassword(auth,em(u),p);await setDoc(doc(fs,'users',c.user.uid),{username:u.toLowerCase(),purpose:pu,created:Date.now()});$('who').textContent=u.toLowerCase()+' \u00b7 '+pu}
+  if(mode==='up'){const c=await createUserWithEmailAndPassword(auth,em(u),p);const h=await H(DEFAULT_CODE);S={hash:h,low:5,biz:''};await setDoc(doc(fs,'users',c.user.uid),{username:u.toLowerCase(),purpose:pu,created:Date.now(),adminHash:h,lowStock:5,biz:''});$('who').textContent=u.toLowerCase()+' \u00b7 '+pu}
   else await signInWithEmailAndPassword(auth,em(u),p);
  }catch(x){const c=x.code||'';e.textContent=c.includes('email-already')?'This username is already taken.':(c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found'))?'Incorrect username or password.':'Unable to continue ('+c+').'}
 };
 $('out').onclick=()=>signOut(auth);
+function refresh(){
+ if(view==='rec'){const a=document.activeElement;if(a&&a.tagName==='INPUT'&&a.closest('#main'))renderList();else render()}
+ else if(view==='dash')dash();
+ else renderSet();
+}
 onAuthStateChanged(auth,async u=>{
  if(unsub){unsub();unsub=null}
- if(!u){uid=null;db={records:{}};cur=null;remote={};$('auth').style.display='flex';$('who').textContent='';$('ap').value='';render();return}
+ if(!u){uid=null;db={records:{}};cur=null;remote={};S={hash:null,low:5,biz:''};$('auth').style.display='flex';$('who').textContent='';$('ap').value='';role='manager';document.body.dataset.role='manager';$('rl').textContent='Manager';$('rsw').textContent='Switch to Admin';setView('dash');return}
  uid=u.uid;$('auth').style.display='none';
- try{const p=await getDoc(doc(fs,'users',uid));if(p.exists())$('who').textContent=p.data().username+' \u00b7 '+p.data().purpose}catch(e){}
+ role='manager';document.body.dataset.role='manager';$('rl').textContent='Manager';$('rsw').textContent='Switch to Admin';
+ setView('dash');
+ try{const p=await getDoc(doc(fs,'users',uid));if(p.exists()){const d=p.data();$('who').textContent=d.username+' \u00b7 '+d.purpose;S={hash:d.adminHash||S.hash||null,low:d.lowStock??5,biz:d.biz||''};if(view==='dash')dash()}}catch(e){}
  unsub=onSnapshot(collection(fs,'users',uid,'records'),snap=>{
   if(snap.metadata.hasPendingWrites)return;
-  const r={},rm={};snap.forEach(d=>{const v=d.data();r[d.id]={sr:v.sr||'',rows:v.rows||[]};rm[d.id]=ser(r[d.id])});
+  const r={},rm={};snap.forEach(d=>{const v=d.data();r[d.id]={sr:v.sr||'',rows:(v.rows||[]).map(nr)};rm[d.id]=ser(r[d.id])});
   remote=rm;if(dirty)return;
   db.records=r;if(!cur||!r[cur])cur=sorted()[0]||null;
-  const a=document.activeElement;if(a&&a.tagName==='INPUT'&&a.closest('#main'))renderList();else render();
+  refresh();
  },()=>toast('Unable to load records. Please check your connection.'));
 });
-render();
+setView('dash');
 </script>
 </body>
 </html>
