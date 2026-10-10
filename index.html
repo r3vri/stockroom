@@ -67,9 +67,6 @@ input{font:inherit;color:var(--ink);background:transparent;border:1px solid tran
 input:hover{border-color:var(--line)}input:focus{outline:none;border-color:var(--acc);background:var(--acc2)}
 select{font:inherit;font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 6px;width:100%;min-width:0;cursor:pointer}
 select:focus{outline:none;border-color:var(--acc)}
-.ds{display:grid;grid-template-columns:.8fr 1.5fr 1fr;gap:6px}
-.ds .dl2{display:block;font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
-.meta .ds{min-width:300px}
 .dates{display:flex;flex-direction:column;gap:6px;max-height:60vh;overflow:auto;margin-top:12px}
 .d{display:flex;justify-content:space-between;align-items:center;padding:9px 11px;border-radius:9px;cursor:pointer;border:1px solid transparent}
 .d:hover{background:var(--acc2)}
@@ -210,6 +207,40 @@ header,.nav,.wrap{position:relative;z-index:1}
 .mmb:hover{border-color:#fff;color:#fff}
 .mmb.on,.mmb.on:hover{background:#fff;color:#000;border-color:#fff}
 .stp{display:none}
+/* ===== calendar ===== */
+.ci{width:16px;height:16px;margin-right:8px;vertical-align:-3px}
+.datebtn{display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;font-weight:600;min-width:180px;text-align:left}
+.datebtn .l{display:inline-flex;align-items:center}
+.datebtn .ci{margin-right:9px}
+.datebtn em{font-style:normal;font-size:11px;font-weight:500;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+.calbox{max-width:390px}
+.cal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.cal-t{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.cal-top .sub{margin-top:2px}
+.cclose{flex:none;width:36px;height:36px;padding:0;border-radius:50%;display:grid;place-items:center;color:var(--mut);background:var(--acc2);border-color:transparent;font-size:14px;line-height:1}
+.cal-h{display:grid;grid-template-columns:36px 36px 1fr 36px 36px;gap:4px;align-items:center;margin-bottom:8px}
+.cal-h button{width:36px;height:36px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:17px;line-height:1;background:none;border-color:transparent;color:var(--ink)}
+.cal-h button:hover{background:var(--acc2);border-color:transparent;color:var(--ink)}
+.cal-m{text-align:center;font-weight:600;font-size:15px}
+.cal-w,.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-w span{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);text-align:center;padding:6px 0;font-weight:600}
+.cal-g button{aspect-ratio:1;width:100%;padding:0;border-radius:12px;position:relative;border:1px solid transparent;background:none;font-size:15px;font-weight:500;font-variant-numeric:tabular-nums}
+.cal-g button:hover{background:var(--acc2);border-color:transparent;color:var(--ink)}
+.cal-g button.out{color:var(--mut);opacity:.5}
+.cal-g button.td{border-color:var(--mut)}
+.cal-g button.has::after{content:"";position:absolute;bottom:6px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--acc)}
+.cal-g button.sel,.cal-g button.sel:hover{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:700}
+.cal-g button.sel::after{background:var(--bg)}
+.cal-g button:disabled{opacity:.28;cursor:not-allowed;background:none}
+.cal-g button:disabled:hover{background:none}
+.cal-sel{margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--acc2);font-size:14px;line-height:1.45}
+.cal-sel b{display:block;font-weight:600}
+.cal-sel span{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
+.box .row.cal-foot{justify-content:flex-end;align-items:center}
+.cal-foot .tdy{margin-right:auto}
+.cal-foot .ok:disabled{opacity:.4;cursor:not-allowed}
+@keyframes sheet{from{transform:translateY(100%)}}
+@keyframes fadein{from{opacity:0}}
 /* ===== mobile mode (only active when body has class mm) ===== */
 body.mm{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));-webkit-tap-highlight-color:transparent}
 body.mm #bg,body.mm .aur.b{display:none}
@@ -234,10 +265,13 @@ body.mm .side{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px}
 body.mm #beta{margin-top:0!important}
 body.mm .dates{grid-column:1/-1;flex-direction:row;overflow-x:auto;max-height:none;margin-top:0;padding-bottom:4px;-webkit-overflow-scrolling:touch}
 body.mm .d{flex:none;min-width:118px;border:1px solid var(--line);flex-direction:column;align-items:flex-start;gap:4px}
-body.mm .meta{gap:10px}
-body.mm .meta>div{flex:1 1 100%;margin-left:0!important}
-body.mm .meta .ds{min-width:0}
+body.mm .meta{gap:10px;align-items:end}
+body.mm .meta>div{flex:1 1 90px;margin-left:0!important;min-width:0}
+body.mm .meta>div:first-child{flex:2 1 170px}
+body.mm .meta>div:nth-child(n+3){flex:1 1 100%}
 body.mm .meta input{width:100%}
+body.mm .datebtn{width:100%;min-height:46px}
+body.mm #del{width:100%;color:#d64545;border-color:rgba(214,69,69,.35)}
 body.mm #main{padding:12px}
 body.mm #main .tw{overflow:visible}
 body.mm #main table{min-width:0!important;display:block}
@@ -295,6 +329,37 @@ body.mm .mod:not(#auth){align-items:flex-end!important;padding:0!important}
 body.mm .box{max-width:none!important;margin:0!important;border-radius:22px 22px 0 0;max-height:92vh;overflow:auto;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 body.mm #auth .box{border-radius:20px;max-width:420px!important;margin:auto!important}
 body.mm .box textarea{height:170px}
+/* --- mobile polish --- */
+body.mm button{touch-action:manipulation}
+body.mm header{flex-direction:column;align-items:stretch;gap:10px;padding:14px 14px 8px}
+body.mm header>div:first-child{display:flex;flex-direction:column;gap:2px}
+body.mm header .row{width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+body.mm header .row::-webkit-scrollbar{display:none}
+body.mm header .row>*{flex:none}
+body.mm #who{font-size:12px}
+body.mm .side{grid-template-columns:1fr 1fr;gap:10px;padding:12px;border-radius:20px}
+body.mm #new{min-height:50px;font-size:15px;font-weight:600}
+body.mm #beta{min-height:50px}
+body.mm .dates{gap:8px;scroll-snap-type:x proximity;scrollbar-width:none;margin:0 -2px;padding:2px}
+body.mm .dates::-webkit-scrollbar{display:none}
+body.mm .d{min-width:108px;padding:10px 12px;border-radius:14px;scroll-snap-align:start;background:var(--card)}
+body.mm .d.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+body.mm .d.on small{color:var(--bg);opacity:.7}
+body.mm #main tr{border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+body.mm #main>.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+body.mm #main>.row button:only-child{grid-column:1/-1}
+body.mm .sum div{padding:12px 14px 12px 18px}
+body.mm .sum b{font-size:18px}
+body.mm .box .row button{flex:1}
+body.mm .mod:not(#auth){animation:fadein .2s ease}
+body.mm .mod:not(#auth) .box{animation:sheet .3s cubic-bezier(.2,.8,.2,1)}
+body.mm .mod:not(#auth) .box::before{content:"";display:block;width:40px;height:4px;border-radius:9px;background:var(--line);margin:-8px auto 14px}
+body.mm .calbox{padding-left:16px;padding-right:16px}
+body.mm .cal-g button,body.mm .cal-h button,body.mm .cclose{min-height:0}
+body.mm .cal-g{gap:3px}
+body.mm .cal-foot .tdy{flex:none}
+body.mm .cal-foot .no,body.mm .cal-foot .ok{flex:1}
+body.mm .datebtn em{display:none}
 /* lighter intro */
 body.mm .aur{filter:blur(50px)}
 body.mm .logo{font-size:clamp(30px,10vw,52px)}
@@ -335,7 +400,7 @@ body.mm #cube{width:130px;height:130px}
 
 <div class="wrap" id="vr" style="display:none">
   <aside class="card side">
-    <button class="p" id="new" style="width:100%">New Record</button><button id="beta" style="width:100%;margin-top:8px">Smart entry <span class="bt">BETA</span></button>
+    <button class="p" id="new" style="width:100%"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>New Record</button><button id="beta" style="width:100%;margin-top:8px">Smart entry <span class="bt">BETA</span></button>
     <div class="dates" id="dates"></div>
   </aside>
   <main class="card" id="main"></main>
@@ -363,7 +428,7 @@ body.mm #cube{width:130px;height:130px}
  L.addEventListener('click',function(){spans.forEach(function(s,i){bounce(s,i*55,true)})});
  /* ---- mobile mode ---- */
  var MMK='stockroom_mm',phone=false;
- try{phone=!!(window.matchMedia&&matchMedia('(pointer:coarse)').matches&&innerWidth<820)}catch(e){}
+ phone=innerWidth<820;
  function applyMM(on,persist){
   document.body.classList.toggle('mm',on);
   var b=document.getElementById('mmb');if(b){b.classList.toggle('on',on);b.querySelector('span').textContent=on?'On':'Off'}
@@ -687,19 +752,45 @@ const addDays=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);r
 const fd=d=>(+d.slice(8))+' '+MS[+d.slice(5,7)-1]+' '+d.slice(0,4);
 const sd=d=>(+d.slice(8))+' '+MS[+d.slice(5,7)-1];
 const wd=d=>new Date(d+'T00:00:00').toLocaleDateString('en-GB',{weekday:'long'});
-function dsHTML(v){
- const [y,m,d]=v.split('-').map(Number),cy=new Date().getFullYear(),ys=[];
- for(let i=cy-5;i<=cy+3;i++)ys.push(i);
- if(!ys.includes(y)){ys.push(y);ys.sort((a,b)=>a-b)}
- const o=(a,sel)=>a.map(([val,t])=>`<option value="${val}"${val===sel?' selected':''}>${t}</option>`).join('');
- return `<div class="ds"><div><span class="dl2">Day</span><select data-p="d">${o(Array.from({length:dim(y,m)},(_,i)=>[i+1,i+1]),d)}</select></div><div><span class="dl2">Month</span><select data-p="m">${o(MONTHS.map((t,i)=>[i+1,t]),m)}</select></div><div><span class="dl2">Year</span><select data-p="y">${o(ys.map(t=>[t,t]),y)}</select></div></div>`;
-}
-function mountDs(el,v,cb){
- el.innerHTML=dsHTML(v);
- el.querySelectorAll('select').forEach(s=>s.onchange=()=>{
-  const g=p=>+el.querySelector('[data-p='+p+']').value;
-  const y=g('y'),m=g('m'),d=Math.min(g('d'),dim(y,m));
-  const n=y+'-'+pad(m)+'-'+pad(d);mountDs(el,n,cb);cb(n)});
+const CALI='<svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
+const WDN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+/* full-month calendar picker (modal on desktop, bottom sheet in mobile mode) */
+function openCal(o){
+ const m=document.createElement('div');m.className='mod';
+ const mark=o.marked||new Set(),dis=o.disabled||new Set();
+ let sel=o.value||today(),vy=+sel.slice(0,4),vm=+sel.slice(5,7)-1;
+ m.innerHTML=`<div class="box calbox" role="dialog" aria-modal="true"><div class="cal-top"><div><div class="cal-t">${o.title}</div><div class="sub">${o.sub||''}</div></div><button type="button" class="cclose" aria-label="Close">&#10005;</button></div>
+ <div class="cal"><div class="cal-h"><button type="button" data-n="-12" aria-label="Previous year">&laquo;</button><button type="button" data-n="-1" aria-label="Previous month">&lsaquo;</button><div class="cal-m"></div><button type="button" data-n="1" aria-label="Next month">&rsaquo;</button><button type="button" data-n="12" aria-label="Next year">&raquo;</button></div>
+ <div class="cal-w">${WDN.map(w=>'<span>'+w+'</span>').join('')}</div><div class="cal-g"></div></div>
+ <div class="cal-sel"></div>
+ <div class="row cal-foot"><button type="button" class="tdy">Today</button><button type="button" class="no">Cancel</button><button type="button" class="p ok"></button></div></div>`;
+ const g=m.querySelector('.cal-g'),ok=m.querySelector('.ok'),si=m.querySelector('.cal-sel');
+ const close=()=>{m.remove();document.removeEventListener('keydown',kd)};
+ const kd=e=>{if(e.key==='Escape')close()};
+ function draw(){
+  const lead=(new Date(vy,vm,1).getDay()+6)%7,t=today();
+  m.querySelector('.cal-m').textContent=MONTHS[vm]+' '+vy;
+  let h='';
+  for(let i=0;i<42;i++){
+   const d=new Date(vy,vm,1-lead+i),k=ymd(d);
+   const c=[d.getMonth()!==vm?'out':'',k===t?'td':'',mark.has(k)?'has':'',k===sel?'sel':''].join(' ').trim();
+   h+=`<button type="button" data-d="${k}" class="${c}" aria-label="${fd(k)}"${k===sel?' aria-pressed="true"':''}${dis.has(k)?' disabled':''}>${d.getDate()}</button>`;
+  }
+  g.innerHTML=h;
+  const ex=mark.has(sel);
+  si.innerHTML=`<b>${wd(sel)}, ${fd(sel)}</b><span>${o.note?o.note(sel,ex):''}</span>`;
+  ok.textContent=o.okText?o.okText(ex):'Select';
+  ok.disabled=dis.has(sel)||(!!o.needChange&&sel===o.value);
+ }
+ const go=n=>{const d=new Date(vy,vm+n,1);vy=d.getFullYear();vm=d.getMonth();draw()};
+ m.querySelectorAll('.cal-h button').forEach(b=>b.onclick=()=>go(+b.dataset.n));
+ g.onclick=e=>{const b=e.target.closest('button[data-d]');if(!b||b.disabled)return;sel=b.dataset.d;vy=+sel.slice(0,4);vm=+sel.slice(5,7)-1;draw()};
+ m.querySelector('.tdy').onclick=()=>{sel=today();vy=+sel.slice(0,4);vm=+sel.slice(5,7)-1;draw()};
+ m.querySelector('.no').onclick=close;m.querySelector('.cclose').onclick=close;
+ m.onclick=e=>{if(e.target===m)close()};
+ ok.onclick=()=>{if(ok.disabled)return;const v=sel;close();o.onPick(v)};
+ document.addEventListener('keydown',kd);
+ document.body.appendChild(m);draw();
 }
 const sorted=()=>Object.keys(db.records).sort().reverse();
 /* ---------- metrics ---------- */
@@ -746,12 +837,16 @@ function newRecord(date){
   else{rows=[];sr='1'}
   db.records[date]={sr,rows};cur=date;save();render();toast(prev?'Record created successfully':'First record created. Tap Add Product to begin.')
 }
-const nextDate=()=>{const ks=Object.keys(db.records).sort();return ks.length?addDays(ks[ks.length-1],1):today()};
+function pickNew(){
+  openCal({title:'New record',sub:'Select the date for this record',value:today(),marked:new Set(Object.keys(db.records)),
+   note:(k,ex)=>ex?'A record already exists for this date. It will be opened.':'No record for this date yet. A new one will be created.',
+   okText:ex=>ex?'Open record':'Create record',onPick:newRecord});
+}
 function renderList(){
   const k=sorted();
-  $('new').textContent='New Record · '+fd(nextDate());
   $('dates').innerHTML=k.length?k.map(d=>`<div class="d ${d===cur?'on':''}" data-d="${d}"><span>${fd(d)}<br><small>${wd(d)}</small></span><small>SR ${db.records[d].sr||'-'}</small></div>`).join(''):'<div class="empty" style="padding:20px 4px">No records available.</div>';
-  $('dates').querySelectorAll('.d').forEach(e=>e.onclick=()=>{cur=e.dataset.d;render()})
+  $('dates').querySelectorAll('.d').forEach(e=>e.onclick=()=>{cur=e.dataset.d;render()});
+  if(document.body.classList.contains('mm')){const dd=$('dates'),on=dd.querySelector('.d.on');if(on)dd.scrollLeft=on.getBoundingClientRect().left-dd.getBoundingClientRect().left+dd.scrollLeft-(dd.clientWidth-on.clientWidth)/2}
 }
 function render(){
   renderList();
@@ -763,7 +858,7 @@ function render(){
   const missing=r.rows.filter(x=>!hasCost(x)).length;
   const cols=adm?12:9;
   m.innerHTML=`<div class="meta">
-    <div><label>Date</label>${adm?'<div id="fdw"></div>':`<div style="padding:8px 0;font-weight:600">${fd(cur)}</div>`}</div>
+    <div><label>Date</label>${adm?`<button type="button" class="datebtn" id="fdb"><span class="l">${CALI}${fd(cur)}</span><em>Change</em></button>`:`<div style="padding:8px 0;font-weight:600">${fd(cur)}</div>`}</div>
     <div><label>SR#</label><input id="fsr" value="${esc(r.sr||'')}" ${adm?'':'readonly tabindex="-1"'}></div>
     ${adm?'<div style="margin-left:auto"><button id="del">Delete Record</button></div>':''}</div>
   <div class="sub" style="margin:-4px 0 14px">${wd(cur)}, ${fd(cur)}${adm?'':' · Manager mode: only the Sold column can be edited'}</div>
@@ -782,10 +877,13 @@ function render(){
     const ai=m.querySelector('[data-i="'+i+'"][data-k="avail"]');if(ai&&document.activeElement!==ai)ai.value=a;
     const pi=m.querySelector('[data-i="'+i+'"][data-k="pre"]');if(pi&&document.activeElement!==pi)pi.value=x.pre;
     sum()};
-  if(adm)mountDs($('fdw'),cur,n=>{
-    if(!n||n===cur)return;
-    if(db.records[n]){toast('A record already exists for the selected date');mountDs($('fdw'),cur,()=>{});return}
-    db.records[n]=r;delete db.records[cur];cur=n;save();render()});
+  if(adm)$('fdb').onclick=()=>{
+    const all=Object.keys(db.records);
+    openCal({title:'Change record date',sub:'Move this record to another day',value:cur,marked:new Set(all),disabled:new Set(all.filter(k=>k!==cur)),needChange:true,
+     note:(k)=>k===cur?'This is the current date of the record.':'Days with a dot already have a record and cannot be selected.',
+     okText:()=>'Change date',
+     onPick:n=>{if(!n||n===cur)return;if(db.records[n]){toast('A record already exists for the selected date');return}db.records[n]=r;delete db.records[cur];cur=n;save();render();toast('Record date changed')}});
+  };
   m.querySelectorAll('input[data-k]').forEach(e=>e.oninput=()=>{
     const i=+e.dataset.i,k=e.dataset.k;
     if(k==='avail'){if(e.value.trim()==='')return;const x=r.rows[i];x.pre=String(num(e.value)-num(x.inn)+num(x.sold)+num(x.exp));save();upd(i);return}
@@ -1169,7 +1267,7 @@ function renderSet(){
  $('imp').onclick=()=>modal('Please paste the backup text to restore. Existing data will be replaced:',{ta:'',ok:'Restore',cb:v=>{try{const d=JSON.parse(v);if(!d.records)throw 0;Object.keys(d.records).forEach(k=>{d.records[k]={sr:d.records[k].sr||'',rows:(d.records[k].rows||[]).map(nr)}});db=d;cur=sorted()[0]||null;save();toast('Backup restored successfully')}catch(x){toast('The backup text provided is invalid')}}});
 }
 /* ---------- sidebar new record ---------- */
-$('new').onclick=()=>newRecord(nextDate());
+$('new').onclick=pickNew;
 $('beta').onclick=openBeta;
 /* ---------- auth ---------- */
 const em=u=>u.toLowerCase()+'@stockroom.app';
